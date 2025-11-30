@@ -1,0 +1,94 @@
+body {
+    background-color: #b6ecec;
+}
+/*
+html {
+    font-family: Laughter;
+}*/
+
+.corpo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#logo {
+    width: 600px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 150px;
+    margin-bottom: 50px;
+}
+
+.botoes {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 100px;
+}
+
+.botao img {
+    width: auto;
+    height: 150px;
+    cursor: pointer;
+}
+
+#settings {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s, visibility 0.3s;
+    font-family: dm-sans, sans-serif;
+    font-size: 14px;
+}
+
+.menu_settings {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width:20%;
+    height:20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#settings.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.definicoes{
+    display: flex;
+    flex-direction: column;
+}
+
+.menu_parametro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titulo_definicoes {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.menu-close{
+    cursor: pointer;
+    height:50%;
+    width:10%;
+
+}
