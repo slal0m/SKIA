@@ -6,21 +6,43 @@
     <meta name="viewport" content="width=device-width">
     <title>Skiá</title>
     <link rel="stylesheet" type="text/css" href="index.css">
-
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
     <div class="palco">
         
     </div>
+    <div class="menu-container">
+        <button class="menu-btn" data-target="cenarios_menu">
+            <span class="material-symbols-outlined icon">
+                castle
+            </span>
+        </button>
+        <button class="menu-btn" data-target="personagens_menu">
+            <span class="material-symbols-outlined icon">person_4</span>
+        </button>
+        <button class="menu-btn" data-target="expressoes_menu">
+            <span class="material-symbols-outlined icon">comedy_mask</span>
+        </button>
+        <button class="menu-btn" data-target="objetos_menu">
+            <span class="material-symbols-outlined icon">wand_stars</span>
+        </button>
+        <button class="menu-btn" data-target="musica_menu">
+            <span class="material-symbols-outlined icon">music_note</span>
+        </button>
+    </div>
     <div class="menu_esquerda">
         <div class="flyoutmenu_e" id="cenarios_menu">
 
         </div>
-        <div class="flyoutmenu_e" id="objetos_menu">
+        <div class="flyoutmenu_e" id="personagens_menu">
 
         </div>
-        <div class="flyoutmenu_e" id="personagens_menu">
+        <div class="flyoutmenu_e" id="expressoes_menu">
+
+        </div>
+        <div class="flyoutmenu_e" id="objetos_menu">
 
         </div>
         <div class="flyoutmenu_e" id="musica_menu">
@@ -35,7 +57,5 @@
     </div>
 
 </body>
-
 <script src="./index.js"></script>
-
 </html>
