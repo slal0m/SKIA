@@ -8,11 +8,6 @@ for (let i = 1; i <= 30; i++) {
     cenarios.push(`images/cenarios/c${i}.jpeg`);
 }
 
-const expressoes = []
-for (let i = 1; i <= 40; i++) {
-    expressoes.push(`images/expressoes/e${i}.jpeg`);
-}
-
 const objetos = []
 for (let i = 1; i <= 35; i++) {
     objetos.push(`images/objetos/o${i}.jpeg`);
@@ -21,7 +16,6 @@ for (let i = 1; i <= 35; i++) {
 const imageLibraries = {
     cenarios,
     personagens,
-    expressoes,
     objetos
 }
 function loadImages(menuId, images) {
