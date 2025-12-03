@@ -1,16 +1,16 @@
 const personagens = [];
 for (let i = 1; i <= 50; i++) {
-    personagens.push(`images/personagens/p${i}.jpeg`);
+    personagens.push(`images/personagens/p${i}.png`);
 }
 
 const cenarios = [];
 for (let i = 1; i <= 30; i++) {
-    cenarios.push(`images/cenarios/c${i}.jpeg`);
+    cenarios.push(`images/cenarios/c${i}.jpg`);
 }
 
 const objetos = []
 for (let i = 1; i <= 35; i++) {
-    objetos.push(`images/objetos/o${i}.jpeg`);
+    objetos.push(`images/objetos/o${i}.png`);
 }
 
 const imageLibraries = {
@@ -18,6 +18,7 @@ const imageLibraries = {
     personagens,
     objetos
 }
+
 function loadImages(menuId, images) {
     const menu = document.getElementById(menuId);
     if (menu) {
@@ -33,12 +34,21 @@ function loadImages(menuId, images) {
             img.addEventListener('click', () => {
                 //console.log('Imagem selecionada:', imageSrc);
                 // aqui é para adicionar o que acontece quando selecioanamos uma imagem
+                placeOnStage(imageSrc);
             });
             menu.appendChild(img);
         });
     }
 }
 
+function placeOnStage(imageSrc) {
+  const palco = document.querySelector('.palco');
+  let stageImg = palco.querySelector('.stage-image');
+  stageImg = document.createElement('img');
+  stageImg.classList.add('stage-image');
+  palco.appendChild(stageImg);
+  stageImg.src = imageSrc;
+}
 
 let currentMenuOpen = null;
 
