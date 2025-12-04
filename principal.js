@@ -27,17 +27,17 @@ function loadImages(menuId, images) {
             const img = document.createElement('img');
             img.src = imageSrc;
             img.alt = `Imagem ${index + 1}`;
-            img.classList.add('menu-image');
+            img.classList.add('menu-image', 'library-item');
             img.onerror = function() {
-                this.style.display = 'none'; // esconde imagens que não existem
+                this.style.display = 'none'; //esconde imagens que não existem
             };
             img.addEventListener('click', () => {
                 //console.log('Imagem selecionada:', imageSrc);
-                // aqui é para adicionar o que acontece quando selecioanamos uma imagem
+                //aqui é para adicionar o que acontece quando selecionamos uma imagem
                 placeOnStage(imageSrc);
             });
             menu.appendChild(img);
-        });
+        })
     }
 }
 
