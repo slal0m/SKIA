@@ -7,75 +7,11 @@
   font-size: 50px;
 }
 
-
 #stage{
     width: auto;
     height: auto;
     pointer-events: none;
     object-fit: contain;
-
-}
-
-.menu-btn{
-    align-content:flex-start;
-    height: 75px;
-    width: 75px;
-    border-radius: 0px 30px 30px 0px;
-}
-
-.principal_menu{
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    align-items: center;
-    justify-content: start;
-}
-
-.menu-container{
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    left: 0px;
-    top: 50%;
-    transform: translateY(-50%);
-    gap: 10px;
-    z-index: 1001;
-    align-items: center;
-}
-
-.flyoutmenu_e {
-    height: 415px;
-    position: fixed;
-    left: 0px;
-    
-    /* 🌟 FIX: These two lines center the menu vertically 🌟 */
-    top: 50%;                 /* Start the top edge at 50% of the viewport height */
-    transform: translateY(-50%); /* Move the menu up by half of its own height */
-    
-    display: none;
-    flex-wrap: wrap;
-    gap: 8px;
-    max-width: 300px;
-    background-color: rgba(189, 17, 17, 0.95);
-    border-radius: 8px;
-    z-index: 1000;
-    
-    /* This aligns the items INSIDE the menu, which is likely desired */
-    align-items: center; 
-}
-
-.flyoutmenu_e.active {
-    display: flex; /* Only show the menu when the 'active' class is present */
-}
-
-
-.menu-image { 
-    height: 100px;
-    width:auto;
-    display: block;
-    align-content: flex-start;
-    object-fit: contain;
-    margin: 4px;
 }
 
 .palco {
@@ -92,13 +28,121 @@
   z-index: 1;
 }
 
-/* imagem do palco */
-.stage-image {
-  max-width: 80%;
-  max-height: 80vh;
-  object-fit: contain;
-  pointer-events: none;
+
+
+
+.menu-btn{
+  border-style: solid;
+  border-width: 2px;
+  border-color: #2d2d2a;
+  border-radius: 0px 30px 30px 0px;
+  align-content:flex-start;
+  height: 75px;
+  width: 75px;
+}
+
+.menu-btn.active {
+    border-left-width: 0;
+}
+
+#lixo{
+  border-style: solid;
+  border-width: 2px;
+  border-color: #2d2d2a;
+  border-radius: 0px 30px 30px 0px;
+  align-content:flex-start;
+  height: 75px;
+  width: 75px;
+
+}
+
+.principal_menu{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: start;
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 10px;
+    z-index: 1001;
+    align-items: center;
+    transition: transform 1s ease-out; 
+}
+
+.menu-container.shifted {
+    transform: translateY(-50%) translateX(300px);
+}
+
+.flyoutmenu_e {
+    height: 411px;
+    width: 300px;
+    position: fixed;
+    left: -300px;
+    top: 50%;                
+    transform: translateY(-50%);
+    display: none;
+    flex-wrap: wrap;
+    z-index: 1000;
+    border:solid;
+    border-width: 2px 2px 2px 0;
+    border-color: #2d2d2a;
+    transition: transform 1s ease-out; 
+    align-items: center; 
+}
+
+.flyoutmenu_e.active {
+    display: flex; 
+    transform: translateY(-50%) translateX(300px);
+}
+
+
+.menu-image { 
+    height: 100px;
+    width:auto;
+    display: block;
+    align-content: flex-start;
+    object-fit: contain;
+    margin: 4px;
 }
 
 
 
+#cenarios_menu{
+  background-color: #9dcc93;
+}
+
+#cenarios{
+  background-color: #9dcc93;
+}
+
+#personagens_menu{
+  background-color: #e5a265;
+}
+
+#personagens{
+  background-color: #e5a265;
+}
+
+#musica_menu{
+  background-color: #dec0d5;
+}
+
+#musica{
+  background-color: #dec0d5;
+}
+
+#objetos_menu{
+  background-color: #9dc7ea;
+}
+
+#objetos{
+  background-color: #9dc7ea;
+}

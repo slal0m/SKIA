@@ -48,49 +48,84 @@ let currentMenuOpen = null;
 // ... (rest of the file)
 
 document.addEventListener('DOMContentLoaded', () => {
-    const menuButtons = document.querySelectorAll('.menu-btn');
+    const menuButtons = document.querySelectorAll('.menu-btn'); // NodeList (All buttons)
     const menuContainer = document.querySelector('.menu-container'); 
-    
+    const TRANSITION_DURATION = 500; // Assuming 0.5s for CSS transition
+
     menuButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const target = this.getAttribute('data-target'); // Ex: 'cenarios_menu'
-            const menuType = target.replace('_menu', ''); // Ex: 'cenarios'
+            const target = this.getAttribute('data-target');
+            const menuType = target.replace('_menu', '');
             
-            // Lógica de Controlo de Abertura
+            const clickedButton = this; // <--- The single button element being clicked
+
+            // 1. Limpa timeouts pendentes
+            document.querySelectorAll('.flyoutmenu_e').forEach(menu => {
+                const timeoutId = menu.dataset.timeoutId;
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    delete menu.dataset.timeoutId;
+                }
+            });
+            
             if (currentMenuOpen !== target) {
-                // 1. ABRIR NOVO MENU
+                // ===================================
+                // ABRIR NOVO MENU
+                // ===================================
                 
-                // 🛑 CORRECTION HERE: Target all flyout menus using the correct class (.flyoutmenu_e)
+                // A. Fechar e limpar o menu anterior
                 document.querySelectorAll('.flyoutmenu_e').forEach(menu => {
-                    menu.innerHTML = '';
-                    menu.classList.remove('active'); // Esconde o menu anterior
+                    menu.classList.remove('active');
+                    // Remove a classe ativa do botão anterior (procura pelo data-target)
+                    document.querySelector(`[data-target="${menu.id}"]`).classList.remove('active'); 
+                    
+                    menu.style.display = 'none'; 
+                    menu.innerHTML = ''; 
                 });
                 
-                // Carregar as novas imagens
+                // B. Carregar as novas imagens
                 if (imageLibraries[menuType]) {
                     loadImages(target, imageLibraries[menuType]);
                 }
                 
-                // Ativar e mostrar o novo menu
                 const newMenu = document.getElementById(target);
+                
                 if (newMenu) {
+                    // C. Set display imediatamente (para o fade-in)
+                    newMenu.style.display = 'flex'; // Use 'grid' ou 'flex' conforme o seu CSS
+                    
+                    // D. Ativar menu (inicia o fade-in)
                     newMenu.classList.add('active');
                 }
                 
-                // Manter o rastreio
+                // E. Mover o menu principal e marcar o botão ATUAL como ativo
+                clickedButton.classList.add('active');         // <-- CORREÇÃO AQUI
+                menuContainer.classList.add('shifted');
+                
                 currentMenuOpen = target; 
                 
             } else { 
-                // 2. FECHAR MENU ATUAL (o botão foi clicado novamente)
+                // ===================================
+                // FECHAR MENU ATUAL
+                // ===================================
                 
                 const currentMenu = document.getElementById(target);
-
-                // Limpa o menu
-                currentMenu.innerHTML = '';
-                // Esconde o menu flutuante
+                
+                // A. Remove a classe ativa (inicia o fade-out)
                 currentMenu.classList.remove('active');
                 
-                // Limpar o rastreio
+                // B. Desmover o menu principal e desmarcar o botão ATUAL
+                menuContainer.classList.remove('shifted');
+                clickedButton.classList.remove('active');     // <-- CORREÇÃO AQUI
+                
+                // C. Atrasar o display: none
+                const timeoutId = setTimeout(() => {
+                    currentMenu.style.display = 'none';
+                    currentMenu.innerHTML = ''; 
+                    delete currentMenu.dataset.timeoutId; 
+                }, TRANSITION_DURATION); 
+                
+                currentMenu.dataset.timeoutId = timeoutId; 
                 currentMenuOpen = null;
             } 
         });
