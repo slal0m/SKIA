@@ -1,3 +1,25 @@
+
+/* ===== VARIABLES ===== */
+:root {
+    /* colours */
+    --black: #2d2d2a;
+    --green: #9dcc93;
+    --blue: #9dc7ea;
+    --orange: #e5a265;
+    --purple: #dec0d6;
+}
+
+/* ===== FONTS ===== */
+@font-face {
+    font-family: "fontspring regular";
+    src: url("../fonts/Fontspring-Regular.otf") format("offtype");
+}
+
+@font-face {
+    font-family: "polina regular";
+    src: url("../fonts/Polina-Regular.otf") format("offtype");
+}
+
 body {
     background-color: #b6ecec;
 }
