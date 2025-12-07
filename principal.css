@@ -4,59 +4,79 @@
   'wght' 400,
   'GRAD' 200,
   'opsz' 24;
-  font-size: 78px;
+  font-size: 50px;
+}
+
+
+#stage{
+    width: auto;
+    height: auto;
+    pointer-events: none;
+    object-fit: contain;
+
 }
 
 .menu-btn{
     align-content:flex-start;
+    height: 75px;
+    width: 75px;
+    border-radius: 0px 30px 30px 0px;
+}
+
+.principal_menu{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: start;
 }
 
 .menu-container{
     display: flex;
     flex-direction: column;
     position: fixed;
-    left: 20px;
+    left: 0px;
     top: 50%;
     transform: translateY(-50%);
     gap: 10px;
     z-index: 1001;
+    align-items: center;
 }
 
 .flyoutmenu_e {
+    height: 415px;
     position: fixed;
-    left: 125px;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 0px;
+    
+    /* 🌟 FIX: These two lines center the menu vertically 🌟 */
+    top: 50%;                 /* Start the top edge at 50% of the viewport height */
+    transform: translateY(-50%); /* Move the menu up by half of its own height */
+    
     display: none;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 12px;
     max-width: 300px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(189, 17, 17, 0.95);
     border-radius: 8px;
-    /*box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);*/
     z-index: 1000;
+    
+    /* This aligns the items INSIDE the menu, which is likely desired */
+    align-items: center; 
 }
 
-.flyoutmenu_e:not(.hidden) {
-    display: flex;
+.flyoutmenu_e.active {
+    display: flex; /* Only show the menu when the 'active' class is present */
 }
 
-.flyoutmenu_e.hidden {
-    display: none;
-    pointer-events: none;
-}
 
-.menu-image {
-    width: 80px; 
-    height: auto;
+.menu-image { 
+    height: 100px;
+    width:auto;
     display: block;
     align-content: flex-start;
     object-fit: contain;
     margin: 4px;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
-
 
 .palco {
   display: flex;

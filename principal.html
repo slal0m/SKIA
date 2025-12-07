@@ -11,46 +11,44 @@
 
 <body>
     <div class="palco">
-        
+        <img id="stage" src="images/stage.png" alt="Palco">
     </div>
-    <div class="menu-container">
-        <button class="menu-btn" data-target="cenarios_menu">
-            <span class="material-symbols-outlined icon">castle</span>
-        </button>
-        <button class="menu-btn" data-target="personagens_menu">
-            <span class="material-symbols-outlined icon">person_4</span>
-        </button>
-        <button class="menu-btn" data-target="objetos_menu">
-            <span class="material-symbols-outlined icon">wand_stars</span>
-        </button>
-        <button class="menu-btn" data-target="musica_menu">
-            <span class="material-symbols-outlined icon">music_note</span>
-        </button>
+    <div class="principal_menu">
+        <div class="menu-container" id="menu-container">
+            <button id="cenarios" class="menu-btn" data-target="cenarios_menu">
+                <span class="material-symbols-outlined icon">castle</span>
+            </button>
+            <button id="personagens" class="menu-btn" data-target="personagens_menu">
+                <span class="material-symbols-outlined icon">person_4</span>
+            </button>
+            <button id="objetos" class="menu-btn" data-target="objetos_menu">
+                <span class="material-symbols-outlined icon">wand_stars</span>
+            </button>
+            <button id="musica" class="menu-btn" data-target="musica_menu">
+                <span class="material-symbols-outlined icon">music_note</span>
+            </button>
+        <button id="lixo" class="menu-btn" data-target="lixo_menu">
+                <span class="material-symbols-outlined icon">music_note</span>
+            </button>
+        </div>
+        <div class="menu_esquerda">
+            <div class="flyoutmenu_e" id="cenarios_menu">
+
+            </div>
+            <div class="flyoutmenu_e" id="personagens_menu">
+
+            </div>
+            <div class="flyoutmenu_e" id="objetos_menu">
+
+            </div>
+            <div class="flyoutmenu_e" id="musica_menu">
+
+            </div>
+            <div class="lixo" id="lixo">
+
+            </div>
+        </div>
     </div>
-    <div class="menu_esquerda">
-        <div class="flyoutmenu_e" id="cenarios_menu">
-
-        </div>
-        <div class="flyoutmenu_e" id="personagens_menu">
-
-        </div>
-        <div class="flyoutmenu_e" id="expressoes_menu">
-
-        </div>
-        <div class="flyoutmenu_e" id="objetos_menu">
-
-        </div>
-        <div class="flyoutmenu_e" id="musica_menu">
-
-        </div>
-        <div class="flyoutmenu_e" id="luz_menu">
-
-        </div>        
-        <div class="lixo" id="lixo">
-
-        </div>
-    </div>
-
 </body>
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 <script src="./principal.js"></script>
