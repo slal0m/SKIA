@@ -23,7 +23,19 @@ interact('.library-item').draggable({
 
         end(event) {
             const clone = event.interaction.clonedElement;
-            const dropzone = document.elementFromPoint(event.pageX, event.pageY);
+
+            // get good coordinates (clientX preferred; fall back to pageX or touches)
+            const x = (typeof event.clientX === 'number') ? event.clientX
+                    : (typeof event.pageX === 'number') ? event.pageX
+                    : (event.touches && event.touches[0] && event.touches[0].clientX) || 0;
+            const y = (typeof event.clientY === 'number') ? event.clientY
+                    : (typeof event.pageY === 'number') ? event.pageY
+                    : (event.touches && event.touches[0] && event.touches[0].clientY) || 0;
+
+            // get all elements under that point (topmost first)
+            const elems = document.elementsFromPoint(x, y);
+
+            const dropzone = elems.find(el => el !== clone && el.classList && el.classList.contains('dropzone'));
 
             if (dropzone) {
                 clone.classList.remove('drag-clone');
@@ -37,6 +49,7 @@ interact('.library-item').draggable({
                 clone.remove();
             }
         }
+
     }
 });
 
@@ -52,31 +65,54 @@ interact('.draggable-item').draggable({
             target.dataset.y = y;
 
             target.style.transform = `translate(${x}px, ${y}px)`;
+        },
+
+        end(event) {
+            const target = event.target;
+
+            const x = (typeof event.clientX === 'number') ? event.clientX
+                    : (typeof event.pageX === 'number') ? event.pageX
+                    : (event.touches && event.touches[0] && event.touches[0].clientX) || 0;
+            const y = (typeof event.clientY === 'number') ? event.clientY
+                    : (typeof event.pageY === 'number') ? event.pageY
+                    : (event.touches && event.touches[0] && event.touches[0].clientY) || 0;
+
+            // get all elements under the pointer
+            const elems = document.elementsFromPoint(x, y);
+
+            // If the dragged element is topmost it will be first in elems — so find deletezone ignoring the dragged element
+            const deletezone = elems.find(el => el !== target && el.classList && el.classList.contains('deletezone'));
+
+            if (deletezone) {
+                target.remove();
+                return;
+            }
         }
+
     }
 });
 
 //scale com multitouch
-interact('.draggable-item').gesturable({
-    listeners: {
-        start(event) {
-            const target = event.target;
-            if (!target.dataset.scale) target.dataset.scale = 1;
-            target.dataset.startScale = target.dataset.scale;
-        },
-        move(event) {
-            const target = event.target;
-            const startScale = parseFloat(target.dataset.startScale);
-            const newScale = startScale * event.scale;
+// interact('.draggable-item').gesturable({
+//     listeners: {
+//         start(event) {
+//             const target = event.target;
+//             if (!target.dataset.scale) target.dataset.scale = 1;
+//             target.dataset.startScale = target.dataset.scale;
+//         },
+//         move(event) {
+//             const target = event.target;
+//             const startScale = parseFloat(target.dataset.startScale);
+//             const newScale = startScale * event.scale;
 
-            target.dataset.scale = newScale;
-            const x = parseFloat(target.dataset.x) || 0;
-            const y = parseFloat(target.dataset.y) || 0;
+//             target.dataset.scale = newScale;
+//             const x = parseFloat(target.dataset.x) || 0;
+//             const y = parseFloat(target.dataset.y) || 0;
 
-            target.style.transform = `translate(${x}px, ${y}px) scale(${newScale})`;
-        }
-    }
-});
+//             target.style.transform = `translate(${x}px, ${y}px) scale(${newScale})`;
+//         }
+//     }
+// });
 
 //impede scroll ao arrastar os clones
 document.body.addEventListener('touchmove', (e) => {
