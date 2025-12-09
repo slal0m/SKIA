@@ -19,34 +19,45 @@ const imageLibraries = {
     objetos
 }
 
-
+const TRANSITION_DURATION = 500;
 
 function loadImages(menuId, images) {
     const menu = document.getElementById(menuId);
+    // Seleciona o contêiner principal: <div class="palco">
+    const mainStage = document.querySelector('.palco');
+
     if (menu) {
         menu.innerHTML = '';
         images.forEach((imageSrc, index) => {
+
             const img = document.createElement('img');
             img.src = imageSrc;
             img.alt = `Imagem ${index + 1}`;
-            img.classList.add('menu-image', 'library-item');
+            img.classList.add('menu-image');
             
-            // if(menuId === 'personagens_menu') {
-            //     img.classList.add('library-item', 'personagens');
-            // }
-            // else if(menuId === 'objetos_menu') {
-            //     img.classList.add('library-item', 'objetos');
-            // }
-            // else if(menuId === 'cenarios_menu') {
-            //     img.classList.add('cenarios');
-            // }
+            if(menuId === 'personagens_menu') {
+                img.classList.add('library-item', 'personagens');
+            }
+            else if(menuId === 'objetos_menu') {
+                img.classList.add('library-item', 'objetos');
+            }
+            else if(menuId === 'cenarios_menu') {
+                img.classList.add('cenarios');
+            }
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
             };
             img.addEventListener('click', () => {
-                //console.log('Imagem selecionada:', imageSrc);
-                // aqui é para adicionar o que acontece quando selecioanamos uma imagem
+                if (menuId === 'cenarios_menu' && mainStage) {
+                    // Aplica a imagem de fundo ao contêiner .palco (camada abaixo)
+                    mainStage.style.backgroundImage = `url('${imageSrc}')`;
+                    mainStage.style.backgroundSize = 'cover'; 
+                    mainStage.style.backgroundPosition = 'center'; 
+                }
+                else {
+
+                }
             });
             menu.appendChild(img);
         });
