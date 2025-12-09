@@ -13,15 +13,59 @@ for (let i = 1; i <= 3; i++) {
     objetos.push(`images/objetos/o${i}.png`);
 }
 
-const musicas = []
+const musicas_icon = []
 for (let i = 1; i <= 6; i++) {
     musicas.push(`images/musicas/m${i}.png`);
 }
+
+const musicas = [];
+for (let i = 1; i <= 6; i++) {
+    musicas.push(`audio/m${i}.mp3`); // Mock path
+}
+
+const backgroundMusic = new Audio();
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5; // Valor inicial do slider
 
 const imageLibraries = {
     cenarios,
     personagens,
     objetos
+}
+
+function loadRightMenuContent(menuId) {
+    const menu = document.getElementById(menuId);
+    if (!menu) return;
+
+    // Limpa o conteúdo (exceto o slider se já estiver lá)
+    if (menuId !== 'som_menu') {
+        menu.innerHTML = `<p>${menuId.replace('_menu', '').toUpperCase()} Menu Content</p>`;
+    }
+    
+    // Configura o menu de SOM (Volume)
+    if (menuId === 'som_menu') {
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+            
+            // Tenta carregar e tocar a primeira música se ainda não estiver tocando
+            if (!backgroundMusic.src && musicas.length > 0) {
+                backgroundMusic.src = musicas[0];
+                backgroundMusic.play().catch(e => console.log("Autoplay falhou ou não iniciado."));
+            }
+            
+            // Sincroniza o slider com o volume atual
+            volumeSlider.value = backgroundMusic.volume;
+
+            // Adiciona o listener para controle de volume
+            if (!volumeSlider.dataset.listenerAttached) {
+                volumeSlider.addEventListener('input', function() {
+                    backgroundMusic.volume = parseFloat(this.value);
+                    console.log("Volume definido para:", backgroundMusic.volume);
+                });
+                volumeSlider.dataset.listenerAttached = 'true';
+            }
+        }
+    }
 }
 
 const TRANSITION_DURATION = 500;
@@ -215,3 +259,113 @@ function setupPersonagemActions() {
 }
 
 setupPersonagemActions();
+
+function luzsom() {
+    const somluz_botao = document.querySelectorAll('luz');
+    const luzsom_menu = document.querySelectorAll('flyoutmenu_d');
+    luzButton.addEventListener('click', () => {
+        luzButton.classList.toggle('active');
+        luz_menu.classList.toggle('active');
+    });
+
+}
+
+
+
+
+//RECORDING SCREEN
+
+let mediaRecorder;
+let recordedChunks = [];
+let stream;
+
+const recordButton = document.getElementById('record-btn');
+const recordIcon = recordButton ? recordButton.querySelector('.icon') : null;
+
+
+function startRecording() {
+    // 1. Capturar o conteúdo da tela
+    navigator.mediaDevices.getDisplayMedia({
+        video: {
+            cursor: "always", // Opcional: para mostrar o cursor
+        },
+        audio: true // Opcional: para gravar áudio do sistema/microfone
+    })
+    .then(displayStream => {
+        stream = displayStream;
+        recordedChunks = [];
+
+        // 2. Configurar o MediaRecorder
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8' });
+
+        mediaRecorder.ondataavailable = function(event) {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = downloadRecording;
+
+        // 3. Iniciar a gravação
+        mediaRecorder.start();
+        
+        // Atualizar o UI
+        if (recordIcon) {
+            recordIcon.textContent = 'stop'; // Mudar o ícone para "Parar"
+            recordButton.classList.add('recording');
+        }
+
+        console.log("Gravação iniciada...");
+    })
+    .catch(err => {
+        console.error("Erro ao iniciar a captura de tela: ", err);
+        alert("Não foi possível iniciar a gravação. Certifique-se de que deu permissão para a captura de tela.");
+    });
+}
+
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        // Parar as tracks (o prompt do navegador para de mostrar a tela compartilhada)
+        stream.getTracks().forEach(track => track.stop());
+
+        // Atualizar o UI
+        if (recordIcon) {
+            recordIcon.textContent = 'videocam'; // Mudar o ícone de volta para "Gravar"
+            recordButton.classList.remove('recording');
+        }
+        console.log("Gravação parada.");
+    }
+}
+
+function downloadRecording() {
+    if (recordedChunks.length === 0) {
+        console.log("Nenhum dado gravado.");
+        return;
+    }
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    
+    // Criar link de download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'minha-cena-skia.webm';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Limpar
+    window.URL.revokeObjectURL(url);
+    a.remove();
+    recordedChunks = []; // Limpa os chunks após o download
+}
+
+if (recordButton) {
+    recordButton.addEventListener('click', () => {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+            startRecording();
+        } else if (mediaRecorder.state === 'recording') {
+            stopRecording();
+        }
+    });
+}
+

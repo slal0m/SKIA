@@ -1,10 +1,9 @@
-.material-symbols-outlined.icon {
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 400,
-  'GRAD' 200,
-  'opsz' 24;
-  font-size: 50px;
+
+
+.icon_acoes{
+  height: 22px;
+  width:auto;
+  align-items: center;
 }
 
 body {
@@ -69,19 +68,6 @@ body {
     color: #333;
 }
 
-/* .outside-delete {
-    position: absolute;
-    top: 5%;
-    left: 90%;
-    right: 0%;
-    bottom: 50.5%;
-    border: 2px solid #ccc;
-    background-color: rgba(255, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
-
 .deletezone {
     width: 100%;
     height: 100%;
@@ -116,6 +102,7 @@ body {
   /*border-width: 2px;
   border-color: #2d2d2a;
   */
+  background-color: #2d2d2a;
   border-radius: 0px 30px 30px 0px;
   align-content:flex-start;
   height: 75px;
@@ -154,6 +141,8 @@ body {
     left: -300px;
     top: 50%;                
     transform: translateY(-50%);
+
+    display: flex;
     flex-wrap: wrap;
     z-index: 1000;
     border:none;
@@ -172,8 +161,8 @@ body {
     height: 100px;
     width:auto;
     align-content: flex-start;
-    object-fit: contain;
-    margin: 4px;
+    /*object-fit: contain;
+    */margin: 4px;
     display:flex;
 }
 
@@ -223,10 +212,12 @@ body {
     visibility: hidden;
     border-radius: 50px;
     transform: translate(-50%, 0);
+    
 }
 
 #menu_acoes.active {
     visibility: visible;
+    transform: translateY(-50%) translateX(300px);
 }
 
 .acao {
@@ -238,7 +229,160 @@ body {
     border-radius: 50%;
 }
 
-.acao .material-symbols-outlined {
-    color: rgb(255, 255, 255);
-    font-size: 24px;
+#record-btn {
+    background-color: #f44336; /* Cor vermelha para Gravar */
+    border-style: none;
+    border-radius: 0px 30px 30px 0px;
+    height: 75px;
+    width: 75px;
+}
+
+#record-btn .material-symbols-outlined {
+    color: white;
+}
+
+.principal_menu_direita{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: start;
+}
+
+.menu-container_direita {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 10px;
+    z-index: 1001;
+    align-items: center;
+    transition: transform 1s ease-out; 
+}
+
+.menu-btn_d{
+  border-style:none;
+  border-radius: 30px 0px 0px 30px;
+  align-content:flex-start;
+  height: 75px;
+  width: 75px;
+}
+
+#luz{
+  background-color: #9dcc93;
+}
+
+#luz_menu{
+  background-color: #9dcc93;
+}
+
+#som{
+  background-color: #9dc7ea;
+}
+
+#som_menu{
+  background-color: #9dc7ea;
+  flex-direction: column; /* Para empilhar o slider verticalmente */
+  padding: 20px;
+}
+
+/* Estilo para o slider de volume */
+#som_menu #volume-slider {
+    width: 80%;
+    margin-top: 10px;
+}
+
+.menu-gravar{
+  border-style:none;
+  background-color: #2d2d2a;
+  border-radius: 30px 0px 0px 30px;
+  align-content:flex-start;
+  height: 75px;
+  width: 75px;
+}
+
+.menu-container_direita {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 0px; /* Alinha à direita */
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 10px;
+    z-index: 1001;
+    align-items: center;
+    transition: transform 1s ease-out;
+}
+
+.menu-container_direita.shifted {
+    /* Desloca o container da direita para a esquerda ao abrir um menu */
+    transform: translateY(-50%) translateX(-300px);
+}
+
+.menu-btn_d {
+    border-style: none;
+    border-radius: 30px 0px 0px 30px; /* Borda arredondada à esquerda */
+    align-content: flex-end;
+    height: 75px;
+    width: 75px;
+}
+
+/* --- Estilos para Menus Flutuantes da Direita --- */
+
+.menu_direita {
+    /* Contêiner wrapper, pode ser necessário para alinhamento */
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 999;
+    pointer-events: none; /* Permite clicar através dele se nenhum menu estiver aberto */
+}
+
+.flyoutmenu_d {
+    height: 415px;
+    width: 300px;
+    position: fixed;
+    /* Começa fora da tela, à direita */
+    right: -300px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 1000;
+    border: none;
+    background-color: #f0f0f0; /* Cor de fundo padrão */
+    transition: transform 1s ease-out;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto; /* Permite interagir com o menu quando ativo */
+}
+
+.flyoutmenu_d.active {
+    display: flex;
+    /* Move para a posição 0 (dentro da tela) */
+    transform: translateY(-50%) translateX(-300px);
+}
+
+.volume-control-container {
+    display: flex;
+    flex-direction: column; /* Organiza ícone e slider verticalmente */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#volume-slider {
+    width: 80%;
+    margin-top: 10px;
+}
+
+/* Estilo para o ícone de volume dentro do menu */
+#musica_menu .material-symbols-outlined.icon {
+    font-size: 40px; /* Um pouco menor para caber melhor */
 }

@@ -28,19 +28,19 @@
     <div class="principal_menu">
         <div class="menu-container" id="menu-container">
             <button id="cenarios" class="menu-btn" data-target="cenarios_menu">
-                <span class="material-symbols-outlined icon">castle</span>
+                <img class="icon" src="icones/cenarios.svg" alt="Cenários">
             </button>
             <button id="personagens" class="menu-btn" data-target="personagens_menu">
-                <span class="material-symbols-outlined icon">person_4</span>
+                <img class="icon" src="icones/personagens.svg" alt="Cenários">
             </button>
             <button id="objetos" class="menu-btn" data-target="objetos_menu">
-                <span class="material-symbols-outlined icon">wand_stars</span>
+                <img class="icon" src="icones/objetos.svg" alt="Cenários">
             </button>
             <button id="musica" class="menu-btn" data-target="musica_menu">
-                <span class="material-symbols-outlined icon">music_note</span>
+                <img class="icon" src="icones/musica.svg" alt="Cenários">
             </button>
             <button id="lixo" class="deletezone" data-target="lixo_menu">
-                <span class="material-symbols-outlined icon">delete</span>
+                <img class="icon" src="icones/lixo.svg" alt="Cenários">
             </button>
         </div>
         <div class="menu_esquerda">
@@ -63,17 +63,50 @@
     </div>
     <div class="menu_acoes" id="menu_acoes">
         <button id="acao1" class="acao" data-target="acao1">
-            <span class="material-symbols-outlined icon">waving_hand</span>
+            <img class="icon icon_acoes" src="icones/acao1.svg" alt="gravar">
         </button>
         <button id="acao2" class="acao" data-target="acao2">
-            <span class="material-symbols-outlined icon">directions_run</span>
+            <img class="icon icon_acoes" src="icones/acenar.svg" alt="gravar">
         </button>
         <button id="acao3" class="acao" data-target="acao2">
-            <span class="material-symbols-outlined icon">directions_walk</span>
+            <img class="icon icon_acoes" src="icones/falar.svg" alt="gravar">
         </button>
+    </div>
+    <div class="principal_menu_direita">
+        <div class="menu-container_direita" id="menu-container_direita">
+            <button id="luz" class="menu-btn_d" data-target="luz_menu">
+                <img class="icon" src="icones/luz.svg" alt="luz">
+            </button>
+            <button id="som" class="menu-btn_d" data-target="som_menu">
+                <img class="icon" src="icones/volume.svg" alt="som">
+            </button>
+            <button id="gravar" class="menu-gravar" data-target="gravar_menu">
+                <img class="icon" src="icones/cenarios.svg" alt="gravar">
+            </button>
+        </div>
+        <div class="menu_direita">
+            <div class="flyoutmenu_d" id="luz_menu">
+
+            </div>
+            <div class="flyoutmenu_d" id="som_menu">
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5"> 
+            </div>
+        </div>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 <script src="./principal.js"></script>
 <script src="./multitouch.js"></script>
 </html>
+
+
+
+function luzsom() {
+    const somluz_botao = document.querySelectorAll('luz');
+    const luzsom_menu = document.querySelectorAll('flyoutmenu_d');
+    luzButton.addEventListener('click', () => {
+        luzButton.classList.toggle('active');
+        luz_menu.classList.toggle('active');
+    });
+
+}
