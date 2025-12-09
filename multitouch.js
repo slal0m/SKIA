@@ -4,7 +4,7 @@ interact('.library-item').draggable({
             const original = event.target;
 
             //cria um clone para drag
-            const clone = original.cloneNode(true);s
+            const clone = original.cloneNode(true);
             clone.classList.remove('library-item');
             clone.classList.add('drag-clone'); 
             clone.style.position = 'absolute';

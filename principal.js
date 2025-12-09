@@ -29,16 +29,17 @@ function loadImages(menuId, images) {
             const img = document.createElement('img');
             img.src = imageSrc;
             img.alt = `Imagem ${index + 1}`;
-            if(menuId === 'personagens_menu') {
-                img.classList.add('library-item', 'personagens');
-            }
-            else if(menuId === 'objetos_menu') {
-                img.classList.add('library-item', 'objetos');
-            }
-            else if(menuId === 'cenarios_menu') {
-                img.classList.add('cenarios');
-            }
-            img.classList.add('menu-image');
+            img.classList.add('menu-image', 'library-item');
+            
+            // if(menuId === 'personagens_menu') {
+            //     img.classList.add('library-item', 'personagens');
+            // }
+            // else if(menuId === 'objetos_menu') {
+            //     img.classList.add('library-item', 'objetos');
+            // }
+            // else if(menuId === 'cenarios_menu') {
+            //     img.classList.add('cenarios');
+            // }
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
