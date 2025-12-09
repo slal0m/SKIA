@@ -13,6 +13,11 @@ for (let i = 1; i <= 3; i++) {
     objetos.push(`images/objetos/o${i}.png`);
 }
 
+const musicas = []
+for (let i = 1; i <= 6; i++) {
+    musicas.push(`images/musicas/m${i}.png`);
+}
+
 const imageLibraries = {
     cenarios,
     personagens,
@@ -66,10 +71,6 @@ function loadImages(menuId, images) {
 
 
 let currentMenuOpen = null;
-
-//const cenarios = document.getElementById()
-
-// ... (rest of the file)
 
 document.addEventListener('DOMContentLoaded', () => {
     const menuButtons = document.querySelectorAll('.menu-btn'); // NodeList (All buttons)
@@ -155,3 +156,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Remova a sua função menu_acoes() e a chamada menu_acoes();
+// Use esta abordagem de delegação (deve ser colocada no seu principal.js):
+
+function setupPersonagemActions() {
+    // É crucial que esta função seja chamada DENTRO do DOMContentLoaded
+    
+    const palco = document.querySelector('.palco');
+    
+    if (!palco) {
+        console.error("Não foi possível encontrar o palco para anexar o listener.");
+        return;
+    }
+
+    // Anexamos o listener ao elemento PALCO
+    palco.addEventListener("click", function (event) {
+        
+        // 1. Procure o menu AQUI (mais seguro contra erros de inicialização)
+        const menu_acoes_element = document.getElementById('menu_acoes'); 
+
+        const clickedItem = event.target.closest('.draggable-item.personagens');
+
+        if (clickedItem) {
+            console.log("Personagem clicado"); 
+            
+            if (menu_acoes_element) {
+                // Obter as coordenadas absolutas e dimensões do personagem
+                const rect = clickedItem.getBoundingClientRect();
+                
+                // 2. Calcular a posição do menu
+                // Queremos o centro horizontal do personagem (rect.left + rect.width / 2)
+                // e logo abaixo da base do personagem (rect.bottom).
+                
+                const menuX = rect.left + rect.width / 2;
+                // Coloca o menu 10px abaixo da base do personagem
+                const menuY = rect.bottom + 10; 
+                
+                // 3. Aplicar a nova posição
+                menu_acoes_element.style.top = `${menuY}px`;
+                menu_acoes_element.style.left = `${menuX}px`;
+                
+                // 4. Ativar e mostrar o menu
+                menu_acoes_element.classList.add("active");
+                console.log("Menu de ações movido e mostrado.");
+            } else {
+                console.error("ERRO: Elemento #menu_acoes não foi encontrado no DOM.");
+            }
+        }
+        else {
+            // Clicou noutro lugar no palco
+            if (menu_acoes_element) {
+                menu_acoes_element.classList.remove("active");
+                console.log("Menu de ações escondido");
+            }
+        }
+    });
+}
+
+setupPersonagemActions();

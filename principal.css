@@ -38,9 +38,9 @@ body {
     left: 10%;
     right: 10%;
     bottom: 50.5%;
-    border: 2px solid #ccc;
+    /*border: 2px solid #ccc;
     background-color: rgba(255, 255, 255, 0.5);
-    display: flex;
+    */display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -51,8 +51,9 @@ body {
     left: 5%;
     right: 5%;
     bottom: 5.5%;
-    border: 2px solid #ccc;
+    /*border: 2px solid #ccc;
     background-color: rgba(255, 255, 255, 0.5);
+    */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,9 +97,10 @@ body {
 }
 
 .menu-btn{
-  border-style: solid;
-  border-width: 2px;
+  border-style:none;
+  /*border-width: 2px;
   border-color: #2d2d2a;
+  */
   border-radius: 0px 30px 30px 0px;
   align-content:flex-start;
   height: 75px;
@@ -110,14 +112,14 @@ body {
 }
 
 #lixo{
-  border-style: solid;
-  border-width: 2px;
+  border-style:none;
+  /*border-width: 2px;
   border-color: #2d2d2a;
+  */
   border-radius: 0px 30px 30px 0px;
   align-content:flex-start;
   height: 75px;
   width: 75px;
-
 }
 
 .principal_menu{
@@ -146,7 +148,7 @@ body {
 }
 
 .flyoutmenu_e {
-    height: 411px;
+    height: 415px;
     width: 300px;
     position: fixed;
     left: -300px;
@@ -154,9 +156,9 @@ body {
     transform: translateY(-50%);
     flex-wrap: wrap;
     z-index: 1000;
-    border:solid;
-    border-width: 2px 2px 2px 0;
-    border-color: #2d2d2a;
+    border:none;
+    /*border-width: 2px 2px 2px 0;
+    border-color: #2d2d2a;*/
     transition: transform 1s ease-out; 
     align-items: center; 
 }
@@ -207,4 +209,36 @@ body {
 
 #objetos{
   background-color: #9dc7ea;
+}
+
+#menu_acoes {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center; 
+    position:fixed;
+    z-index: 10000; 
+    width: 140px;
+    height: 50px;
+    visibility: hidden;
+    border-radius: 50px;
+    transform: translate(-50%, 0);
+}
+
+#menu_acoes.active {
+    visibility: visible;
+}
+
+.acao {
+    width: 40px;
+    height: 40px;
+    background-color: #2d2d2a; 
+    border-style: none;
+    /*border-color: solid 2px #2d2d2a;*/
+    border-radius: 50%;
+}
+
+.acao .material-symbols-outlined {
+    color: rgb(255, 255, 255);
+    font-size: 24px;
 }
