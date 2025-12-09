@@ -1,15 +1,15 @@
 const personagens = [];
-for (let i = 1; i <= 50; i++) {
+for (let i = 1; i <= 6; i++) {
     personagens.push(`images/personagens/p${i}.png`);
 }
 
 const cenarios = [];
-for (let i = 1; i <= 30; i++) {
-    cenarios.push(`images/cenarios/c${i}.jpeg`);
+for (let i = 1; i <= 3; i++) {
+    cenarios.push(`images/cenarios/c${i}.png`);
 }
 
 const objetos = []
-for (let i = 1; i <= 35; i++) {
+for (let i = 1; i <= 3; i++) {
     objetos.push(`images/objetos/o${i}.png`);
 }
 
@@ -19,6 +19,8 @@ const imageLibraries = {
     objetos
 }
 
+
+
 function loadImages(menuId, images) {
     const menu = document.getElementById(menuId);
     if (menu) {
@@ -27,7 +29,17 @@ function loadImages(menuId, images) {
             const img = document.createElement('img');
             img.src = imageSrc;
             img.alt = `Imagem ${index + 1}`;
-            img.classList.add('menu-image', 'library-item');
+            if(menuId === 'personagens_menu') {
+                img.classList.add('library-item', 'personagens');
+            }
+            else if(menuId === 'objetos_menu') {
+                img.classList.add('library-item', 'objetos');
+            }
+            else if(menuId === 'cenarios_menu') {
+                img.classList.add('cenarios');
+            }
+            img.classList.add('menu-image');
+
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
             };
