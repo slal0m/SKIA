@@ -32,10 +32,8 @@ interact('.library-item').draggable({
                     : (typeof event.pageY === 'number') ? event.pageY
                     : (event.touches && event.touches[0] && event.touches[0].clientY) || 0;
 
-            // get all elements under that point (topmost first)
-            const elems = document.elementsFromPoint(x, y);
-
-            const dropzone = elems.find(el => el !== clone && el.classList && el.classList.contains('dropzone'));
+            const elements = document.elementsFromPoint(x, y);
+            const dropzone = elements.find(el => el !== clone && el.classList.contains('dropzone'));
 
             if (dropzone) {
                 clone.classList.remove('drag-clone');
@@ -49,7 +47,6 @@ interact('.library-item').draggable({
                 clone.remove();
             }
         }
-
     }
 });
 
@@ -77,18 +74,14 @@ interact('.draggable-item').draggable({
                     : (typeof event.pageY === 'number') ? event.pageY
                     : (event.touches && event.touches[0] && event.touches[0].clientY) || 0;
 
-            // get all elements under the pointer
-            const elems = document.elementsFromPoint(x, y);
-
-            // If the dragged element is topmost it will be first in elems — so find deletezone ignoring the dragged element
-            const deletezone = elems.find(el => el !== target && el.classList && el.classList.contains('deletezone'));
+            const elements = document.elementsFromPoint(x, y);
+            const deletezone = elements.find(el => el !== target && el.classList.contains('deletezone'));
 
             if (deletezone) {
                 target.remove();
                 return;
             }
         }
-
     }
 });
 
