@@ -65,6 +65,7 @@ interact('.library-item').draggable({
                 //Set data attributes for translation state
                 clone.dataset.x = x_rel;
                 clone.dataset.y = y_rel;
+                clone.dataset.scaleX = 1;
 
                 //Configure absolute positioning within the dropzone container
                 clone.style.position = 'absolute'; 
@@ -73,7 +74,7 @@ interact('.library-item').draggable({
                 
                 //Apply the initial relative translation and scale
                 const scale = parseFloat(clone.dataset.scale);
-                clone.style.transform = `translate(${x_rel}px, ${y_rel}px) scale(${scale})`;
+                clone.style.transform = `translate(${x_rel}px, ${y_rel}px) scale(1, ${scale})`;
 
                 //Append the clone to the dropzone's parent (e.g., .inner-palco-top)
                 dropzone.parentElement.appendChild(clone);
@@ -97,12 +98,13 @@ interact('.draggable-item')
                 let x = (parseFloat(target.dataset.x) || 0) + event.dx;
                 let y = (parseFloat(target.dataset.y) || 0) + event.dy;
                 const currentScale = parseFloat(target.dataset.scale) || 1;
+                const currentScaleX = parseFloat(target.dataset.scaleX) || 1;
 
                 target.dataset.x = x;
                 target.dataset.y = y;
 
                 //Apply translate and preserve scale
-                target.style.transform = `translate(${x}px, ${y}px) scale(${currentScale})`;
+                target.style.transform = `translate(${x}px, ${y}px) scale(${currentScale * currentScaleX}, ${currentScale})`;
             },
 
             end(event) {
@@ -124,6 +126,7 @@ interact('.draggable-item')
                 const target = event.target;
                 //Ensures scale data attribute exists
                 if (!target.dataset.scale) target.dataset.scale = 1;
+                if (!target.dataset.scaleX) target.dataset.scaleX = 1;
                 target.dataset.startScale = target.dataset.scale;
             },
             move(event) {
@@ -134,9 +137,10 @@ interact('.draggable-item')
                 target.dataset.scale = newScale;
                 const x = parseFloat(target.dataset.x) || 0;
                 const y = parseFloat(target.dataset.y) || 0;
+                const currentScaleX = parseFloat(target.dataset.scaleX) || 1;
 
                 //Apply translate and the new scale
-                target.style.transform = `translate(${x}px, ${y}px) scale(${newScale})`;
+                target.style.transform = `translate(${x}px, ${y}px) scale(${newScale * currentScaleX}, ${newScale})`;
             }
         }
     });

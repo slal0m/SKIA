@@ -29,6 +29,7 @@ const imageLibraries = {
     musica: musica_icons
 }
 
+let activeDraggableItem = null;
 let currentLightValue = 100;
 
 function loadRightMenuContent(menuId) {
@@ -86,6 +87,31 @@ function loadRightMenuContent(menuId) {
             volumeSlider.addEventListener('input', updateBackgroundVolume);
             volumeSlider.value = backgroundMusic.volume; // Carrega o valor atual ao abrir
         }
+    }
+}
+
+function flipActiveItem() {
+    if (activeDraggableItem) {
+        // 1. Obtém o estado atual da escala horizontal (padrão é 1)
+        let currentScaleX = parseFloat(activeDraggableItem.dataset.scaleX) || 1;
+        
+        // 2. Alterna entre 1 (normal) e -1 (flip)
+        let newScaleX = currentScaleX * -1; 
+        
+        // 3. Salva o novo valor nos dados do elemento
+        activeDraggableItem.dataset.scaleX = newScaleX;
+
+        // 4. Recupera as outras transformações (posição e escala geral)
+        const x = parseFloat(activeDraggableItem.dataset.x) || 0;
+        const y = parseFloat(activeDraggableItem.dataset.y) || 0;
+        const scale = parseFloat(activeDraggableItem.dataset.scale) || 1; 
+
+        // 5. Aplica a nova transformação
+        // O flip é feito usando scale(scaleX * scale, scale)
+        activeDraggableItem.style.transform = 
+            `translate(${x}px, ${y}px) scale(${scale * newScaleX}, ${scale})`;
+            
+        console.log(`Item virado. Novo scaleX: ${newScaleX}`);
     }
 }
 
@@ -275,55 +301,55 @@ document.addEventListener('DOMContentLoaded', () => {
 // Use esta abordagem de delegação (deve ser colocada no seu principal.js):
 
 function setupPersonagemActions() {
-    // É crucial que esta função seja chamada DENTRO do DOMContentLoaded
-    
     const palco = document.querySelector('.palco');
+    const menu_acoes_element = document.getElementById('menu_acoes'); 
+    // Captura o botão "Refletir"
+    const flipButton = document.getElementById('refletir'); 
+
+    // 1. Listener para o botão de Flip (Chama a função criada acima)
+    if (flipButton) {
+        flipButton.removeEventListener('click', flipActiveItem); 
+        flipButton.addEventListener('click', flipActiveItem);
+    }
     
     if (!palco) {
         console.error("Não foi possível encontrar o palco para anexar o listener.");
         return;
     }
 
-    // Anexamos o listener ao elemento PALCO
     palco.addEventListener("click", function (event) {
         
-        // 1. Procure o menu AQUI (mais seguro contra erros de inicialização)
-        const menu_acoes_element = document.getElementById('menu_acoes'); 
-
         const clickedItem = event.target.closest('.draggable-item.personagens');
+        const isActionClick = event.target.closest('#menu_acoes button'); 
 
         if (clickedItem) {
-            console.log("Personagem clicado"); 
-            
+            // AQUI É O PONTO CHAVE: Salva o elemento clicado
+            activeDraggableItem = clickedItem;
+
             if (menu_acoes_element) {
-                // Obter as coordenadas absolutas e dimensões do personagem
+                // ... (Sua lógica de posicionamento do menu aqui)
                 const rect = clickedItem.getBoundingClientRect();
-                
-                // 2. Calcular a posição do menu
-                // Queremos o centro horizontal do personagem (rect.left + rect.width / 2)
-                // e logo abaixo da base do personagem (rect.bottom).
-                
                 const menuX = rect.left + rect.width / 2;
-                // Coloca o menu 10px abaixo da base do personagem
                 const menuY = rect.bottom + 10; 
                 
-                // 3. Aplicar a nova posição
                 menu_acoes_element.style.top = `${menuY}px`;
                 menu_acoes_element.style.left = `${menuX}px`;
                 
-                // 4. Ativar e mostrar o menu
                 menu_acoes_element.classList.add("active");
                 console.log("Menu de ações movido e mostrado.");
-            } else {
-                console.error("ERRO: Elemento #menu_acoes não foi encontrado no DOM.");
             }
         }
+        else if (isActionClick) {
+             // Deixa o menu de ações aberto se a ação clicada for dentro dele
+             console.log("Ação do menu clicada.");
+        }
         else {
-            // Clicou noutro lugar no palco
+            // Clicou noutro lugar, esconde o menu
             if (menu_acoes_element) {
                 menu_acoes_element.classList.remove("active");
                 console.log("Menu de ações escondido");
             }
+            activeDraggableItem = null; // Limpa o item ativo
         }
     });
 }
