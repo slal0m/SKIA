@@ -289,6 +289,7 @@ function setupPersonagemActions() {
         
         // 1. Procure o menu AQUI (mais seguro contra erros de inicialização)
         const menu_acoes_element = document.getElementById('menu_acoes'); 
+
         const clickedItem = event.target.closest('.draggable-item.personagens');
 
         if (clickedItem) {
@@ -403,39 +404,7 @@ function luzsom() {
 
 luzsom();
 
-function setupReflectAction() {
-    const reflectButton = document.getElementById('refletir');
-    
-    if (reflectButton) {
-        reflectButton.addEventListener('click', () => {
-            if (!activeCharacter) return; // Não faz nada se nenhum personagem estiver ativo
-            
-            // Pega o estado atual de X, Y e Scale (geral)
-            const x = parseFloat(activeCharacter.dataset.x) || 0;
-            const y = parseFloat(activeCharacter.dataset.y) || 0;
-            const currentScale = parseFloat(activeCharacter.dataset.scale) || 1;
-            
-            // Pega o estado atual de ScaleX (se existir, default é 1)
-            let currentScaleX = parseFloat(activeCharacter.dataset.scaleX) || 1;
 
-            // Alterna o estado de reflexão: 1 -> -1, ou -1 -> 1
-            const newScaleX = currentScaleX * -1;
-            
-            // Salva o novo estado
-            activeCharacter.dataset.scaleX = newScaleX;
-            
-            // Aplica a nova transformação.
-            // A ordem é Translate, ScaleX, ScaleY (que é currentScale)
-            activeCharacter.style.transform = 
-                `translate(${x}px, ${y}px) scaleX(${newScaleX}) scaleY(${currentScale})`;
-            
-            // Alterna o estado visual do botão
-            reflectButton.classList.toggle('active');
-            
-            console.log(`Personagem refletido: ScaleX = ${newScaleX}`);
-        });
-    }
-}
 
 
 
