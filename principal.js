@@ -21,7 +21,8 @@ for (let i = 1; i <= 6; i++) {
 const imageLibraries = {
     cenarios,
     personagens,
-    objetos
+    objetos,
+    musicas
 }
 
 let currentLightValue = 100;
@@ -112,7 +113,7 @@ function loadImages(menuId, images) {
             else if(menuId === 'musicas_menu') {
                 img.classList.add('musicas');
             }
-            
+
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
