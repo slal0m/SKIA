@@ -4,7 +4,7 @@ for (let i = 1; i <= 6; i++) {
 }
 
 const cenarios = [];
-for (let i = 1; i <= 3; i++) {
+for (let i = 1; i <= 9; i++) {
     cenarios.push(`images/cenarios/c${i}.png`);
 }
 
