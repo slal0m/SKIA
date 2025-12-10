@@ -93,16 +93,17 @@ interact('.draggable-item')
             },
 
             move(event) {
-                const target = event.target;
-                let x = (parseFloat(target.dataset.x) || 0) + event.dx;
-                let y = (parseFloat(target.dataset.y) || 0) + event.dy;
-                const currentScale = parseFloat(target.dataset.scale) || 1;
+            const target = event.target;
+            let x = (parseFloat(target.dataset.x) || 0) + event.dx;
+            let y = (parseFloat(target.dataset.y) || 0) + event.dy;
+            const currentScale = parseFloat(target.dataset.scale) || 1;
+            const currentScaleX = parseFloat(target.dataset.scaleX) || 1; // NOVO
+    
+            target.dataset.x = x;
+            target.dataset.y = y;
 
-                target.dataset.x = x;
-                target.dataset.y = y;
-
-                //Apply translate and preserve scale
-                target.style.transform = `translate(${x}px, ${y}px) scale(${currentScale})`;
+            // APLICAR TRANSFORM COM scaleX
+            target.style.transform = `translate(${x}px, ${y}px) scaleX(${currentScaleX}) scaleY(${currentScale})`; // NOVO
             },
 
             end(event) {
@@ -134,9 +135,10 @@ interact('.draggable-item')
                 target.dataset.scale = newScale;
                 const x = parseFloat(target.dataset.x) || 0;
                 const y = parseFloat(target.dataset.y) || 0;
+                const currentScaleX = parseFloat(target.dataset.scaleX) || 1; // NOVO
 
-                //Apply translate and the new scale
-                target.style.transform = `translate(${x}px, ${y}px) scale(${newScale})`;
+                // APLICAR TRANSFORM COM scaleX
+                target.style.transform = `translate(${x}px, ${y}px) scaleX(${currentScaleX}) scaleY(${newScale})`; // NOV
             }
         }
     });

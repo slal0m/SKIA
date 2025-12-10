@@ -116,11 +116,53 @@ function loadImages(menuId, images) {
             }
             else if(menuId === 'musica_menu') {
                 img.classList.add('musicas');
+                img.addEventListener('click', () => {
+                    
+                    const musicNumber = index + 1;
+                    const audioPath = `audios/m${musicNumber}.wav`;
+                    
+                    const isSameTrackPlaying = (backgroundMusic.src.endsWith(audioPath) && !backgroundMusic.paused);
+                    
+                    document.querySelectorAll('.musica').forEach(el => el.classList.remove('active-track'));
+
+                    if (isSameTrackPlaying) {
+                        // 1. SE A MESMA MÚSICA ESTIVER A TOCAR, PARAR.
+                        backgroundMusic.pause();
+                        console.log(`Música ${musicNumber} parada.`);
+                        
+                    } else if (backgroundMusic.src.endsWith(audioPath)) {
+                        // 2. SE A MESMA MÚSICA ESTIVER PAUSADA, CONTINUAR.
+                        backgroundMusic.play().then(() => {
+                            img.classList.add('active-track');
+                            console.log(`Música ${musicNumber} retomada.`);
+                        }).catch(error => console.error("Erro ao retomar:", error));
+
+                    } else {
+                        // 3. SE FOR UMA NOVA MÚSICA, MUDAR O SOURCE E TOCAR.
+                        backgroundMusic.src = audioPath;
+                        backgroundMusic.play().then(() => {
+                            img.classList.add('active-track');
+                            console.log(`A tocar: ${audioPath}`);
+                        }).catch(error => {
+                            console.error(`Erro ao tentar tocar a música ${audioPath}:`, error);
+                            alert(`Não foi possível tocar o ficheiro de áudio ${audioPath}. Verifique o caminho.`);
+                        });
+                    }
+                });
             }
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
             };
+
+            if (menuId === 'cenarios_menu' && mainStage) {
+                img.addEventListener('click', () => { 
+                    mainStage.style.backgroundImage = `url('${imageSrc}')`;
+                    mainStage.style.backgroundSize = 'cover'; 
+                    mainStage.style.backgroundPosition = 'center'; 
+                });
+            }
+
             img.addEventListener('click', () => {
                 if (menuId === 'cenarios_menu' && mainStage) {
                     // Aplica a imagem de fundo ao contêiner .palco (camada abaixo)
@@ -247,7 +289,6 @@ function setupPersonagemActions() {
         
         // 1. Procure o menu AQUI (mais seguro contra erros de inicialização)
         const menu_acoes_element = document.getElementById('menu_acoes'); 
-
         const clickedItem = event.target.closest('.draggable-item.personagens');
 
         if (clickedItem) {
@@ -361,6 +402,40 @@ function luzsom() {
 }
 
 luzsom();
+
+function setupReflectAction() {
+    const reflectButton = document.getElementById('refletir');
+    
+    if (reflectButton) {
+        reflectButton.addEventListener('click', () => {
+            if (!activeCharacter) return; // Não faz nada se nenhum personagem estiver ativo
+            
+            // Pega o estado atual de X, Y e Scale (geral)
+            const x = parseFloat(activeCharacter.dataset.x) || 0;
+            const y = parseFloat(activeCharacter.dataset.y) || 0;
+            const currentScale = parseFloat(activeCharacter.dataset.scale) || 1;
+            
+            // Pega o estado atual de ScaleX (se existir, default é 1)
+            let currentScaleX = parseFloat(activeCharacter.dataset.scaleX) || 1;
+
+            // Alterna o estado de reflexão: 1 -> -1, ou -1 -> 1
+            const newScaleX = currentScaleX * -1;
+            
+            // Salva o novo estado
+            activeCharacter.dataset.scaleX = newScaleX;
+            
+            // Aplica a nova transformação.
+            // A ordem é Translate, ScaleX, ScaleY (que é currentScale)
+            activeCharacter.style.transform = 
+                `translate(${x}px, ${y}px) scaleX(${newScaleX}) scaleY(${currentScale})`;
+            
+            // Alterna o estado visual do botão
+            reflectButton.classList.toggle('active');
+            
+            console.log(`Personagem refletido: ScaleX = ${newScaleX}`);
+        });
+    }
+}
 
 
 

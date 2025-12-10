@@ -177,27 +177,27 @@ body {
 }
 
 #personagens_menu{
-  background-color: #e5a265;
+  background-color: #e5d67c;
 }
 
 #personagens{
-  background-color: #e5a265;
+  background-color: #e5d67c;
 }
 
 #musica_menu{
-  background-color: #dec0d5;
+  background-color: #9dc7ea;
 }
 
 #musica{
-  background-color: #dec0d5;
+  background-color: #9dc7ea;
 }
 
 #objetos_menu{
-  background-color: #9dc7ea;
+  background-color: #dec0d5;
 }
 
 #objetos{
-  background-color: #9dc7ea;
+  background-color: #dec0d5;
 }
 
 #menu_acoes {
@@ -207,7 +207,7 @@ body {
     align-items: center; 
     position:fixed;
     z-index: 10000; 
-    width: 140px;
+    width: 200px;
     height: 50px;
     visibility: hidden;
     border-radius: 50px;
@@ -425,4 +425,8 @@ body {
     border-radius: 50%;
     background: #2d2d2a; /* Cor escura para o puxador */
     border: 2px solid white;
+}
+
+#refletir{
+  margin-left: 20px;
 }
