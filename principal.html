@@ -81,12 +81,16 @@
                 <img class="icon" src="icones/volume.svg" alt="som">
             </button>
             <button id="gravar" class="menu-gravar" data-target="gravar_menu">
-                <img class="icon" src="icones/cenarios.svg" alt="gravar">
+                <img class="icon" id="rec" src="icones/rec.svg" alt="gravar">
             </button>
         </div>
         <div class="menu_direita">
             <div class="flyoutmenu_d" id="luz_menu">
-
+                <div class="light-control-container">
+                    <img class="icon" src="icones/moon.svg" alt="Escuro">
+                    <input type="range" id="light-slider" min="20" max="100" step="1" value="100">
+                    <img class="icon" src="icones/sun.svg" alt="Luz">
+                </div>
             </div>
             <div class="flyoutmenu_d" id="som_menu">
                 <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5"> 
@@ -99,14 +103,3 @@
 <script src="./multitouch.js"></script>
 </html>
 
-
-
-function luzsom() {
-    const somluz_botao = document.querySelectorAll('luz');
-    const luzsom_menu = document.querySelectorAll('flyoutmenu_d');
-    luzButton.addEventListener('click', () => {
-        luzButton.classList.toggle('active');
-        luz_menu.classList.toggle('active');
-    });
-
-}

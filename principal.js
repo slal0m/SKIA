@@ -13,19 +13,10 @@ for (let i = 1; i <= 3; i++) {
     objetos.push(`images/objetos/o${i}.png`);
 }
 
-const musicas_icon = []
+const musicas = []
 for (let i = 1; i <= 6; i++) {
     musicas.push(`images/musicas/m${i}.png`);
 }
-
-const musicas = [];
-for (let i = 1; i <= 6; i++) {
-    musicas.push(`audio/m${i}.mp3`); // Mock path
-}
-
-const backgroundMusic = new Audio();
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.5; // Valor inicial do slider
 
 const imageLibraries = {
     cenarios,
@@ -33,37 +24,62 @@ const imageLibraries = {
     objetos
 }
 
+let currentLightValue = 100;
+
 function loadRightMenuContent(menuId) {
     const menu = document.getElementById(menuId);
     if (!menu) return;
 
-    // Limpa o conteúdo (exceto o slider se já estiver lá)
-    if (menuId !== 'som_menu') {
-        menu.innerHTML = `<p>${menuId.replace('_menu', '').toUpperCase()} Menu Content</p>`;
+    // --- Configuração do Menu de LUZ (Luminosidade) ---
+    if (menuId === 'luz_menu') {
+        const lightSlider = document.getElementById('light-slider');
+        const mainStage = document.querySelector('.palco');
+
+        if (lightSlider && mainStage) {
+            
+            // Função de atualização (deve ser definida para ser referenciada)
+            function updateBackgroundLight() { 
+                const value = parseInt(this.value);
+                
+                // 1. ATUALIZA O VALOR GLOBAL ANTES DE MUDAR A COR
+                currentLightValue = value; 
+                
+                const colorValue = Math.round((value / 100) * 255);
+                const rgbColor = `rgb(${colorValue}, ${colorValue}, ${colorValue})`;
+                
+                mainStage.style.backgroundColor = rgbColor;
+                console.log(`Luz definida para: ${value}% (${rgbColor})`);
+            }
+            
+            // Remove o listener anterior para evitar duplicação (boas práticas)
+            lightSlider.removeEventListener('input', updateBackgroundLight); 
+            
+            // 2. APLICA O VALOR GLOBAL GUARDADO AO SLIDER
+            lightSlider.value = currentLightValue; 
+
+            // Adiciona o novo listener
+            lightSlider.addEventListener('input', updateBackgroundLight);
+
+            // 3. EXECUTA A FUNÇÃO UMA VEZ PARA APLICAR O VALOR GUARDADO AO PALCO
+            updateBackgroundLight.call(lightSlider); 
+        }
     }
-    
-    // Configura o menu de SOM (Volume)
+
+    // --- Configuração do Menu de SOM (Volume) ---
     if (menuId === 'som_menu') {
         const volumeSlider = document.getElementById('volume-slider');
+        
         if (volumeSlider) {
+             // ... (Mantenha aqui a sua lógica existente para o volume) ...
+             // (Garantir que updateBackgroundVolume também atualiza uma variável global se necessário)
+             volumeSlider.removeEventListener('input', updateBackgroundVolume); 
             
-            // Tenta carregar e tocar a primeira música se ainda não estiver tocando
-            if (!backgroundMusic.src && musicas.length > 0) {
-                backgroundMusic.src = musicas[0];
-                backgroundMusic.play().catch(e => console.log("Autoplay falhou ou não iniciado."));
+            function updateBackgroundVolume() {
+                 backgroundMusic.volume = parseFloat(this.value);
             }
             
-            // Sincroniza o slider com o volume atual
-            volumeSlider.value = backgroundMusic.volume;
-
-            // Adiciona o listener para controle de volume
-            if (!volumeSlider.dataset.listenerAttached) {
-                volumeSlider.addEventListener('input', function() {
-                    backgroundMusic.volume = parseFloat(this.value);
-                    console.log("Volume definido para:", backgroundMusic.volume);
-                });
-                volumeSlider.dataset.listenerAttached = 'true';
-            }
+            volumeSlider.addEventListener('input', updateBackgroundVolume);
+            volumeSlider.value = backgroundMusic.volume; // Carrega o valor atual ao abrir
         }
     }
 }
@@ -260,16 +276,79 @@ function setupPersonagemActions() {
 
 setupPersonagemActions();
 
+// VERSÃO CORRIGIDA (MAS NÃO RECOMENDADA)
 function luzsom() {
-    const somluz_botao = document.querySelectorAll('luz');
-    const luzsom_menu = document.querySelectorAll('flyoutmenu_d');
-    luzButton.addEventListener('click', () => {
-        luzButton.classList.toggle('active');
-        luz_menu.classList.toggle('active');
-    });
+    // 1. Definições de Elementos
+    const luz_botao = document.getElementById('luz');
+    const luz_menu = document.getElementById('luz_menu');
+    const som_botao = document.getElementById('som');
+    const som_menu = document.getElementById('som_menu');
+    const menu_containter_direita = document.querySelector('.menu-container_direita');
+    
+    // Certifique-se de que o container existe
+    if (!menu_containter_direita) {
+        console.error("Container da direita não encontrado!");
+        return;
+    }
 
+    // --- LÓGICA DO BOTÃO LUZ ---
+    if (luz_botao && luz_menu) {
+        luz_botao.addEventListener('click', () => {
+            console.log('Toggle Luz');
+            
+            // 1. Fechar o menu oposto (Som) se estiver aberto
+            if (som_menu && som_menu.classList.contains('active')) {
+                som_menu.classList.remove('active');
+                som_botao.classList.remove('active');
+            }
+            
+            // 2. Abrir/Fechar o menu Luz
+            luz_botao.classList.toggle('active');
+            luz_menu.classList.toggle('active');
+
+            // 3. Controlar o deslocamento do container principal
+            // O container só deve ser shifted se algum menu estiver ativo
+            if (luz_menu.classList.contains('active')) {
+                menu_containter_direita.classList.add('shifted');
+                loadRightMenuContent('luz_menu');
+            } else {
+                menu_containter_direita.classList.remove('shifted');
+            }
+        });
+    }
+
+    // --- LÓGICA DO BOTÃO SOM ---
+    if (som_botao && som_menu) {
+        som_botao.addEventListener('click', () => {
+            console.log('Toggle Som');
+
+            // 1. Fechar o menu oposto (Luz) se estiver aberto
+            if (luz_menu && luz_menu.classList.contains('active')) {
+                luz_menu.classList.remove('active');
+                luz_botao.classList.remove('active');
+            }
+
+            // 2. Abrir/Fechar o menu Som
+            som_botao.classList.toggle('active');
+            som_menu.classList.toggle('active');
+            
+            // 3. Controlar o deslocamento do container principal
+            // O container só deve ser shifted se algum menu estiver ativo
+            if (som_menu.classList.contains('active')) {
+                menu_containter_direita.classList.add('shifted');
+            } else {
+                menu_containter_direita.classList.remove('shifted');
+            }
+            
+            // Chamamos a lógica de volume, se for o menu som
+            if (som_menu.classList.contains('active') && typeof loadRightMenuContent === 'function') {
+                loadRightMenuContent('som_menu');
+            }
+        });
+    }
 }
 
+luzsom();
 
 
 

@@ -212,12 +212,10 @@ body {
     visibility: hidden;
     border-radius: 50px;
     transform: translate(-50%, 0);
-    
 }
 
 #menu_acoes.active {
     visibility: visible;
-    transform: translateY(-50%) translateX(300px);
 }
 
 .acao {
@@ -262,6 +260,11 @@ body {
     transition: transform 1s ease-out; 
 }
 
+.menu-container_direita.shifted {
+    transform: translateY(-50%) translateX(-300px);
+}
+
+
 .menu-btn_d{
   border-style:none;
   border-radius: 30px 0px 0px 30px;
@@ -284,14 +287,6 @@ body {
 
 #som_menu{
   background-color: #9dc7ea;
-  flex-direction: column; /* Para empilhar o slider verticalmente */
-  padding: 20px;
-}
-
-/* Estilo para o slider de volume */
-#som_menu #volume-slider {
-    width: 80%;
-    margin-top: 10px;
 }
 
 .menu-gravar{
@@ -303,86 +298,131 @@ body {
   width: 75px;
 }
 
-.menu-container_direita {
-    display: flex;
-    flex-direction: column;
+#luz_menu {
+    height: 245px;
+    width: 300px;
     position: fixed;
-    right: 0px; /* Alinha à direita */
-    top: 50%;
-    transform: translateY(-50%);
-    gap: 10px;
-    z-index: 1001;
-    align-items: center;
+    right: -300px; /* Posição inicial: Fora da tela */
+    top: 50%; 
+
+    transform: translateY(-50%); 
+    
+    display: flex;
+    flex-wrap: wrap; /* Mantido do original */
+    flex-direction: column; /* Garante que align-items/justify-content funcionem para centralização */
+    align-items: center; /* Centraliza Horizontalmente */
+    justify-content: center; /* Centraliza Verticalmente */
+    
+    z-index: 1000;
+    border:none;
+    background-color: #9dcc93; /* Cor de fundo (Luz) */
     transition: transform 1s ease-out;
 }
 
-.menu-container_direita.shifted {
-    /* Desloca o container da direita para a esquerda ao abrir um menu */
+#luz_menu.active {
+    display: flex; 
+    /* CORRIGIDO: Mude de translateY(50%) para -50% para manter a centralização */
     transform: translateY(-50%) translateX(-300px);
 }
 
-.menu-btn_d {
-    border-style: none;
-    border-radius: 30px 0px 0px 30px; /* Borda arredondada à esquerda */
-    align-content: flex-end;
-    height: 75px;
-    width: 75px;
-}
-
-/* --- Estilos para Menus Flutuantes da Direita --- */
-
-.menu_direita {
-    /* Contêiner wrapper, pode ser necessário para alinhamento */
-    position: fixed;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    z-index: 999;
-    pointer-events: none; /* Permite clicar através dele se nenhum menu estiver aberto */
-}
-
-.flyoutmenu_d {
-    height: 415px;
+/* --- Correção: Menu Som (#som_menu) --- */
+#som_menu {
+    height: 245px;
     width: 300px;
     position: fixed;
-    /* Começa fora da tela, à direita */
-    right: -300px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: -300px; /* Posição inicial: Fora da tela */
+    top: 50%; 
+    /* CORRIGIDO: Mude de translateY(50%) para -50% para centralizar */
+    transform: translateY(-50%); 
 
     display: flex;
     flex-wrap: wrap;
     z-index: 1000;
-    border: none;
-    background-color: #f0f0f0; /* Cor de fundo padrão */
-    transition: transform 1s ease-out;
+    border:none;
+    transition: transform 1s ease-out; 
+    align-items: center; 
+    
+    /* Propriedades extras do som */
+    flex-direction: column;
+    background-color: #9dc7ea;
     align-items: center;
     justify-content: center;
-    pointer-events: auto; /* Permite interagir com o menu quando ativo */
 }
 
-.flyoutmenu_d.active {
-    display: flex;
-    /* Move para a posição 0 (dentro da tela) */
+#som_menu.active {
+    display: flex; 
+    /* Esta linha já estava correta: Mover para a posição 0 na horizontal */
     transform: translateY(-50%) translateX(-300px);
 }
 
-.volume-control-container {
-    display: flex;
-    flex-direction: column; /* Organiza ícone e slider verticalmente */
-    align-items: center;
+/* --- Estilos para o Slider de Luz (Luminosidade) --- */
+
+.light-control-container {
+  display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-between;
+    width: 90%; 
+    max-width: 260px;
+}
+
+.light-control-container .icon {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0; /* Impede que os ícones encolham */
+    margin: 0 5px;
+}
+
+#light-slider {
+    -webkit-appearance: none; /* Remove estilos padrão do Chrome/Safari */
+    appearance: none;
+    border: 2px solid #2d2d2a;
+    width: 100%; /* Ocupa o espaço restante */
+    height: 8px;
+    background: linear-gradient(to right, #000000, #FFFFFF); /* Fundo gradual preto -> branco */
+    border-radius: 4px;
     justify-content: center;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+    cursor: pointer;
 }
 
-#volume-slider {
-    width: 80%;
-    margin-top: 10px;
+#light-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2d2d2a;
+    border: 2px solid white;
+    margin: 0 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Estilo para o ícone de volume dentro do menu */
-#musica_menu .material-symbols-outlined.icon {
-    font-size: 40px; /* Um pouco menor para caber melhor */
+#rec{
+  height: 45px;
+  width:auto;
+}
+
+#volume-slider{
+  -webkit-appearance: none; 
+  appearance: none;
+  border: 2px solid #2d2d2a;
+  border-radius: 4px;
+  background: linear-gradient(to right, #000000, #FFFFFF); /* Fundo gradual preto -> branco */
+  cursor: pointer;
+}
+
+#som_menu #volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2d2d2a; /* Cor escura para o puxador */
+    border: 2px solid white;
+}
+
+#som_menu #volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2d2d2a; /* Cor escura para o puxador */
+    border: 2px solid white;
 }
