@@ -13,16 +13,20 @@ for (let i = 1; i <= 3; i++) {
     objetos.push(`images/objetos/o${i}.png`);
 }
 
-const musicas = []
+const musica_icons = [] 
 for (let i = 1; i <= 6; i++) {
-    musicas.push(`images/audios/m${i}.png`);
+    musica_icons.push(`images/audios/m${i}.png`); // Assumindo que você usa /musicas/m*.png para os ícones
 }
+
+const backgroundMusic = new Audio();
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
 
 const imageLibraries = {
     cenarios,
     personagens,
     objetos,
-    musicas
+    musica: musica_icons
 }
 
 let currentLightValue = 100;
@@ -110,10 +114,9 @@ function loadImages(menuId, images) {
             else if(menuId === 'cenarios_menu') {
                 img.classList.add('cenarios');
             }
-            else if(menuId === 'musicas_menu') {
+            else if(menuId === 'musica_menu') {
                 img.classList.add('musicas');
             }
-
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
@@ -124,6 +127,10 @@ function loadImages(menuId, images) {
                     mainStage.style.backgroundImage = `url('${imageSrc}')`;
                     mainStage.style.backgroundSize = 'cover'; 
                     mainStage.style.backgroundPosition = 'center'; 
+                }
+                else if (menuId === 'musica_menu') { // <--- NOVO: Adicione uma ação para a música
+                    // Aqui pode adicionar a lógica para tocar a música
+                    // Exemplo: playMusic(imageSrc);
                 }
                 else {
 
