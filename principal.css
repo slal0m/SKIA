@@ -7,13 +7,14 @@
 }
 
 #logo {
-    width: 600px;
+    width: 100px;
     height: auto;
     margin-left: auto;
     margin-right: auto;
-    display: block;
-    margin-top: 250px;
-    margin-bottom: 50px;
+    display: flex;
+    margin-top: 10px;
+    margin-left: 10px;
+    position: fixed;
     z-index: 10000;
 }
 
@@ -176,6 +177,8 @@ body {
 
 #cenarios_menu{
   background-color: #9dcc93;
+  overflow-y: auto;     /* enables vertical scroll */
+  overflow-x: hidden;   
 }
 
 #cenarios{
@@ -184,6 +187,8 @@ body {
 
 #personagens_menu{
   background-color: #e5d67c;
+  overflow-y: auto;     /* enables vertical scroll */
+  overflow-x: hidden;   
 }
 
 #personagens{
@@ -192,6 +197,8 @@ body {
 
 #musica_menu{
   background-color: #9dc7ea;
+  overflow-y: auto;     /* enables vertical scroll */
+  overflow-x: hidden;   
 }
 
 #musica{
@@ -200,6 +207,8 @@ body {
 
 #objetos_menu{
   background-color: #dec0d5;
+  overflow-y: auto;     /* enables vertical scroll */
+  overflow-x: hidden;   
 }
 
 #objetos{
