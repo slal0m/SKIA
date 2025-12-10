@@ -6,6 +6,16 @@
   align-items: center;
 }
 
+#logo {
+    width: 600px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 250px;
+    margin-bottom: 50px;
+    z-index: 10000;
+}
 
 body {
     touch-action: none;

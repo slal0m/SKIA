@@ -414,7 +414,7 @@ let mediaRecorder;
 let recordedChunks = [];
 let stream;
 
-const recordButton = document.getElementById('record-btn');
+const recordButton = document.getElementById('gravar');
 const recordIcon = recordButton ? recordButton.querySelector('.icon') : null;
 
 
