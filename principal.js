@@ -15,7 +15,7 @@ for (let i = 1; i <= 3; i++) {
 
 const musicas = []
 for (let i = 1; i <= 6; i++) {
-    musicas.push(`images/musicas/m${i}.png`);
+    musicas.push(`images/audios/m${i}.png`);
 }
 
 const imageLibraries = {
@@ -109,6 +109,10 @@ function loadImages(menuId, images) {
             else if(menuId === 'cenarios_menu') {
                 img.classList.add('cenarios');
             }
+            else if(menuId === 'musicas_menu') {
+                img.classList.add('musicas');
+            }
+            
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
