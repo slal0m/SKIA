@@ -6,6 +6,7 @@
   align-items: center;
 }
 
+
 body {
     touch-action: none;
 }
@@ -37,9 +38,7 @@ body {
     left: 10%;
     right: 10%;
     bottom: 50.5%;
-    /*border: 2px solid #ccc;
-    background-color: rgba(255, 255, 255, 0.5);
-    */display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -50,9 +49,6 @@ body {
     left: 5%;
     right: 5%;
     bottom: 5.5%;
-    /*border: 2px solid #ccc;
-    background-color: rgba(255, 255, 255, 0.5);
-    */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -428,5 +424,9 @@ body {
 }
 
 #refletir{
-  margin-left: 20px;
+  margin-left: 10px;
+}
+
+.acao_bt{
+  align-items: center;
 }
