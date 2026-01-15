@@ -81,11 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const fecharBtn = document.getElementById('fechar-menu');
     const toggleBtn = document.getElementById('toggle-menu-btn');
     const menuUnificado = document.getElementById('menu-unificado');
+    const btnReset = document.getElementById('btn-reset-personagem');
     
     if (fecharBtn) {
         fecharBtn.addEventListener('click', () => {
             menuUnificado.classList.remove('active');
             if (toggleBtn) toggleBtn.classList.remove('hidden');
+            if (btnReset) btnReset.classList.add('hidden');
         });
     }
     
@@ -675,10 +677,12 @@ function abrirMenuAcessoriosPersonagem(numPersonagem, elemento) {
     const container = document.getElementById('menu-unificado');
     const toggleBtn = document.getElementById('toggle-menu-btn');
     const nomeElement = document.getElementById('personagem-nome-selecionado');
+    const btnReset = document.getElementById('btn-reset-personagem');
     
     nomeElement.textContent = ``;
     container.classList.add('active');
     if (toggleBtn) toggleBtn.classList.add('hidden');
+    if (btnReset) btnReset.classList.add('hidden');
     
     // Atualizar miniaturas
     atualizarMiniaturasSelecionadas(numPersonagem);
@@ -746,7 +750,6 @@ function carregarExpressoes(numPersonagem) {
         label.textContent = item.label;
         
         itemDiv.appendChild(img);
-        itemDiv.appendChild(label);
         
         // Click para atualizar o personagem
         itemDiv.addEventListener('click', () => {
@@ -828,7 +831,7 @@ function carregarAcoes(numPersonagem) {
         label.textContent = item.label;
         
         itemDiv.appendChild(img);
-        itemDiv.appendChild(label);
+
         
         // Click para atualizar o personagem
         itemDiv.addEventListener('click', () => {
@@ -846,6 +849,10 @@ function carregarAcoes(numPersonagem) {
                 // Guardar ação selecionada
                 acaoSelecionada = item.numAcao;
                 
+                // Mostrar o botão de reset quando uma ação for selecionada
+                const btnReset = document.getElementById('btn-reset-personagem');
+                if (btnReset) btnReset.classList.remove('hidden');
+                
                 console.log(`Personagem ${personagemSelecionado} atualizado com ação: ${item.label}`);
             }
         });
@@ -853,6 +860,37 @@ function carregarAcoes(numPersonagem) {
         grid.appendChild(itemDiv);
     });
 }
+
+// Função para resetar o personagem à posição neutra
+function resetarPersonagem() {
+    if (elementoPersonagemSelecionado && personagemSelecionado) {
+        elementoPersonagemSelecionado.src = `images/personagens/p${personagemSelecionado}.png`;
+        
+        // Remover seleção de ações
+        document.querySelectorAll('#grid-acoes .item-biblioteca.selecionado').forEach(el => {
+            el.classList.remove('selecionado');
+        });
+        
+        // Remover seleção de expressões
+        document.querySelectorAll('#grid-expressoes .item-biblioteca.selecionado').forEach(el => {
+            el.classList.remove('selecionado');
+        });
+        
+        // Resetar variáveis
+        acaoSelecionada = null;
+        expressaoSelecionada = null;
+        
+        console.log(`Personagem ${personagemSelecionado} foi resetado`);
+    }
+}
+
+// Adicionar listener ao botão de reset
+document.addEventListener('DOMContentLoaded', () => {
+    const btnReset = document.getElementById('btn-reset-personagem');
+    if (btnReset) {
+        btnReset.addEventListener('click', resetarPersonagem);
+    }
+});
 
 // Setup das abas
 document.addEventListener('DOMContentLoaded', () => {

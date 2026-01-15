@@ -396,6 +396,37 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.secao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-desfazer {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: dec0d5;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.btn-desfazer:active {
+    transform: scale(0.95);
+}
+
+.btn-desfazer .material-symbols-outlined {
+    font-size: 18px;
+}
+
 .item-thumbnail {
     width: 60px;
     height: 60px;
