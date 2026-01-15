@@ -676,7 +676,7 @@ function abrirMenuAcessoriosPersonagem(numPersonagem, elemento) {
     const toggleBtn = document.getElementById('toggle-menu-btn');
     const nomeElement = document.getElementById('personagem-nome-selecionado');
     
-    nomeElement.textContent = `PERSONAGEM ${numPersonagem}`;
+    nomeElement.textContent = ``;
     container.classList.add('active');
     if (toggleBtn) toggleBtn.classList.add('hidden');
     
