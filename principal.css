@@ -146,7 +146,6 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 500;
-    border-top: 2px solid #999;
     border-radius: 16px 16px 0 0;
     transition: transform 0.3s ease-out;
 }
@@ -205,10 +204,16 @@ body {
     min-height: 80px;
 }
 
+@font-face {
+  font-family: myFont; /* set name */
+  src:url(fonts/DMSans-Regular.ttf); /* url of the font */
+}
+
 .menu-header h3 {
-    margin: 0;
+    font-family: myFont; /* use font */
+    margin: 0 0 0 40px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 400;
     color: #333;
     flex: 1;
 }
@@ -283,10 +288,11 @@ body {
 }
 
 .secao-titulo {
+    font-family: myFont; /* use font */
     margin: 0 0 12px 0;
     color: #333;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 550;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -441,7 +447,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0;
 }
 
@@ -577,7 +583,7 @@ body {
     justify-content: space-around;
     align-items: center; 
     position:fixed;
-    z-index: 10000; 
+    z-index: 50; 
     width: 250px;
     height: 50px;
     visibility: hidden;
