@@ -217,8 +217,8 @@ interact('.library-item').draggable({
       clone.style.zIndex = 9999;
 
       // estado inicial
-      // Personagens e objetos têm escala 2x, outros itens têm escala 1x
-      const scale = (original.classList.contains('personagens') || original.classList.contains('objetos')) ? 2 : 1;
+      // Personagens e objetos têm escala 1.5x, outros itens têm escala 1x
+      const scale = (original.classList.contains('personagens') || original.classList.contains('objetos')) ? 1.5 : 1;
       clone.dataset.scale = clone.dataset.scale ?? scale;
       clone.dataset.scaleX = clone.dataset.scaleX ?? 1;
       clone.dataset.x = 0;

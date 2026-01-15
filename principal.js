@@ -193,6 +193,60 @@ function loadImages(menuId, images) {
     const menu = document.getElementById(menuId);
     // Seleciona o contêiner principal: <div class="palco">
     const mainStage = document.querySelector('.palco');
+    
+    // Função para adicionar personagem/objeto ao palco com click
+    function adicionarItemAoPalco(imageSrc, classe) {
+        // Encontrar a dropzone (pode ser top ou bottom, vamos usar a primeira)
+        const dropzone = document.querySelector('.dropzone');
+        if (!dropzone) return;
+        
+        // Criar o elemento
+        const img = document.createElement('img');
+        img.src = imageSrc;
+        img.classList.add('draggable-item', classe);
+        img.style.position = 'absolute';
+        img.style.pointerEvents = 'auto';
+        img.style.zIndex = 1002;
+        
+        // Posição aleatória perto do meio
+        const dzRect = dropzone.getBoundingClientRect();
+        const centerX = dzRect.width / 2;
+        const centerY = dzRect.height / 2;
+        const randomX = centerX + (Math.random() - 0.5) * 200; // ±100px do centro
+        const randomY = centerY + (Math.random() - 0.5) * 200; // ±100px do centro
+        
+        if (classe === 'personagens') {
+            img.dataset.scale = 0.25   ;
+        } else if (classe === 'objetos') {
+            img.dataset.scale = 0.05;
+        } else {
+            img.dataset.scale = 1;
+        }
+        img.dataset.scaleX = 1;
+        img.dataset.x = randomX - centerX;
+        img.dataset.y = randomY - centerY;
+        
+        // Aplicar transform
+        const scale = parseFloat(img.dataset.scale);
+        const scaleX = parseFloat(img.dataset.scaleX);
+        img.style.transform = `translate(${img.dataset.x}px, ${img.dataset.y}px) scale(${scale * scaleX}, ${scale})`;
+        
+        // Adicionar ao palco
+        dropzone.appendChild(img);
+        
+        // Atualizar menu e abrir biblioteca se for personagem
+        if (typeof atualizarMenuPersonagens === 'function') {
+            atualizarMenuPersonagens();
+        }
+        
+        if (classe === 'personagens' && typeof abrirMenuAcessoriosPersonagem === 'function') {
+            const srcMatch = img.src.match(/p(\d+)/);
+            if (srcMatch) {
+                const numPersonagem = parseInt(srcMatch[1]);
+                abrirMenuAcessoriosPersonagem(numPersonagem, img);
+            }
+        }
+    }
 
     if (menu) {
         menu.innerHTML = '';
@@ -205,9 +259,15 @@ function loadImages(menuId, images) {
             
             if(menuId === 'personagens_menu') {
                 img.classList.add('library-item', 'personagens');
+                img.addEventListener('click', () => {
+                    adicionarItemAoPalco(imageSrc, 'personagens');
+                });
             }
             else if(menuId === 'objetos_menu') {
                 img.classList.add('library-item', 'objetos');
+                img.addEventListener('click', () => {
+                    adicionarItemAoPalco(imageSrc, 'objetos');
+                });
             }
             else if(menuId === 'cenarios_menu') {
                 img.classList.add('cenarios');
@@ -607,6 +667,7 @@ if (recordButton) {
 let personagemSelecionado = null; // Número do personagem (1-6)
 let elementoPersonagemSelecionado = null; // Referência ao elemento IMG do personagem
 let expressaoSelecionada = 1; // Expressão atual para as ações (1-3)
+let acaoSelecionada = null; // Ação selecionada (1-3)
 
 function abrirMenuAcessoriosPersonagem(numPersonagem, elemento) {
     personagemSelecionado = numPersonagem;
@@ -701,8 +762,21 @@ function carregarExpressoes(numPersonagem) {
                 itemDiv.classList.add('selecionado');
                 
                 // Atualizar expressão selecionada e recarregar ações
+                const expressaoAnterior = expressaoSelecionada;
                 expressaoSelecionada = item.numExpressao;
+                
+                // Recarregar ações e manter a mesma ação selecionada
                 carregarAcoes(personagemSelecionado);
+                
+                // Se havia uma ação selecionada, selecionar a mesma na nova expressão
+                if (acaoSelecionada) {
+                    setTimeout(() => {
+                        const acaoItems = document.querySelectorAll('#grid-acoes .item-biblioteca');
+                        if (acaoItems[acaoSelecionada - 1]) {
+                            acaoItems[acaoSelecionada - 1].click();
+                        }
+                    }, 0);
+                }
                 
                 console.log(`Personagem ${personagemSelecionado} atualizado com expressão: ${item.label}`);
             }
@@ -726,13 +800,19 @@ function carregarAcoes(numPersonagem) {
         acoes.push({
             src,
             label: `Ação ${f}`,
-            filename
+            filename,
+            numAcao: f
         });
     }
     
     acoes.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'item-biblioteca';
+        
+        // Selecionar automaticamente a ação anterior se existir
+        if (acaoSelecionada === item.numAcao) {
+            itemDiv.classList.add('selecionado');
+        }
         
         const img = document.createElement('img');
         img.className = 'item-thumbnail';
@@ -762,6 +842,9 @@ function carregarAcoes(numPersonagem) {
                 
                 // Adicionar seleção ao clicado
                 itemDiv.classList.add('selecionado');
+                
+                // Guardar ação selecionada
+                acaoSelecionada = item.numAcao;
                 
                 console.log(`Personagem ${personagemSelecionado} atualizado com ação: ${item.label}`);
             }
