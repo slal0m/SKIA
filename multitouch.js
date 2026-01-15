@@ -35,6 +35,59 @@ function updateMenuPosition() {
     }
 }
 
+// === FUNÇÃO MESTRA DE TRANSFORMAÇÃO ===
+function atualizarPosicaoVisual(elemento) {
+    // 1. Ler os valores guardados (ou usar 0/1 se não existirem)
+    const x = parseFloat(elemento.dataset.x) || 0;
+    const y = parseFloat(elemento.dataset.y) || 0;
+    const angulo = parseFloat(elemento.dataset.angle) || 0;
+    const escala = parseFloat(elemento.dataset.scale) || 1;
+    const scaleX = parseFloat(elemento.dataset.scaleX) || 1; // Para o flip (espelho)
+
+    // 2. Aplicar tudo numa única linha de comando
+    elemento.style.transform = `translate(${x}px, ${y}px) rotate(${angulo}deg) scale(${escala * scaleX}, ${escala})`;
+}
+
+// === LÓGICA DO BOTÃO RODAR ===
+let anguloInicialDrag = 0;
+let anguloPersonagemInicial = 0;
+
+interact('#rodar').draggable({
+    onstart: function (event) {
+        // 'activeDraggableItem' é a variável que já tens no teu código que guarda o boneco selecionado
+        if (!activeDraggableItem) return;
+
+        const rect = activeDraggableItem.getBoundingClientRect();
+        const centroX = rect.left + rect.width / 2;
+        const centroY = rect.top + rect.height / 2;
+
+        // Calcula o ângulo do dedo em relação ao centro do boneco
+        anguloInicialDrag = Math.atan2(event.clientY - centroY, event.clientX - centroX);
+        
+        // Guarda o ângulo que o boneco já tinha
+        anguloPersonagemInicial = parseFloat(activeDraggableItem.dataset.angle) || 0;
+    },
+    onmove: function (event) {
+        if (!activeDraggableItem) return;
+
+        const rect = activeDraggableItem.getBoundingClientRect();
+        const centroX = rect.left + rect.width / 2;
+        const centroY = rect.top + rect.height / 2;
+
+        // Novo ângulo do dedo
+        const anguloAtual = Math.atan2(event.clientY - centroY, event.clientX - centroX);
+        
+        // Diferença em graus
+        const rotacao = (anguloAtual - anguloInicialDrag) * (180 / Math.PI);
+
+        // Atualiza o dataset
+        activeDraggableItem.dataset.angle = anguloPersonagemInicial + rotacao;
+
+        // CHAMA A FUNÇÃO MESTRA (Isto é o mais importante!)
+        atualizarPosicaoVisual(activeDraggableItem);
+    }
+});
+
 function showActionPanel() {
   if (!actionPanel) return;
   actionPanel.classList.add('visible');
@@ -319,9 +372,7 @@ interact('.draggable-item')
         target.dataset.x = x;
         target.dataset.y = y;
 
-        const s  = parseFloat(target.dataset.scale)  || 1;
-        const sx = parseFloat(target.dataset.scaleX) || 1;
-        target.style.transform = `translate(${x}px, ${y}px) scale(${s * sx}, ${s})`;
+        atualizarPosicaoVisual(target);
 
         // Se está em grupo, mover os demais com mesmo delta
         if (target.dataset.groupId) {
