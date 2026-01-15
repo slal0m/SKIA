@@ -283,7 +283,7 @@ function loadImages(menuId, images) {
                     
                     const isSameTrackPlaying = (backgroundMusic.src.endsWith(audioPath) && !backgroundMusic.paused);
                     
-                    document.querySelectorAll('.musica').forEach(el => el.classList.remove('active-track'));
+                    document.querySelectorAll('.musicas').forEach(el => el.classList.remove('active-track'));
 
                     if (isSameTrackPlaying) {
                         // 1. SE A MESMA MÚSICA ESTIVER A TOCAR, PARAR.
