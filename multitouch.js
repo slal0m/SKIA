@@ -1,4 +1,3 @@
-
 /**********************
  * Configurações
  **********************/
@@ -20,6 +19,21 @@ const selected = new Set();       // Set<Element>
 const actionPanel = document.getElementById('actionPanel');
 const btnGroup    = document.getElementById('btnGroup');
 const btnUngroup  = document.getElementById('btnUngroup');
+
+function updateMenuPosition() {
+    const menu = document.getElementById('menu_acoes');
+    // Ensure both the menu and an active item exist
+    if (menu && activeDraggableItem && menu.classList.contains('active')) {
+        const rect = activeDraggableItem.getBoundingClientRect();
+        
+        // Center the menu horizontally below the item
+        const menuX = rect.left + rect.width / 2;
+        const menuY = rect.bottom + 10; 
+
+        menu.style.top = `${menuY}px`;
+        menu.style.left = `${menuX}px`;
+    }
+}
 
 function showActionPanel() {
   if (!actionPanel) return;
@@ -325,6 +339,7 @@ interact('.draggable-item')
             });
           }
         }
+        updateMenuPosition();
 
         // Reposiciona painel enquanto move
         if (selected.size > 0) positionActionPanelNearSelection();
