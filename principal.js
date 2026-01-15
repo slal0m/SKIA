@@ -32,6 +32,78 @@ const imageLibraries = {
 let activeDraggableItem = null;
 let currentLightValue = 100;
 
+// ===== MENU DE PERSONAGENS ADICIONADOS =====
+const personagensAdicionados = new Map(); // Map<elementId, {elemento, thumbnail, index}>
+
+function atualizarMenuPersonagens() {
+    const dropzones = document.querySelectorAll('.dropzone');
+    const todosPersonagens = [];
+    
+    dropzones.forEach(dz => {
+        const itens = dz.querySelectorAll('.draggable-item.personagens');
+        itens.forEach(item => {
+            todosPersonagens.push(item);
+        });
+    });
+
+    // Atualizar Map
+    personagensAdicionados.clear();
+    todosPersonagens.forEach((item, index) => {
+        const id = item.id || `personagem_${Date.now()}_${index}`;
+        if (!item.id) item.id = id;
+        
+        // Extrair número do personagem do src (p1, p2, etc)
+        const srcMatch = item.src.match(/p(\d+)/);
+        const numPersonagem = srcMatch ? parseInt(srcMatch[1]) : (index + 1);
+        
+        personagensAdicionados.set(id, {
+            elemento: item,
+            thumbnail: item.src,
+            index: index,
+            numPersonagem: numPersonagem  // Guardar o número real do personagem (1-6)
+        });
+    });
+}
+
+// Observar mudanças na dropzone
+function setupPersonagensObserver() {
+    const dropzones = document.querySelectorAll('.dropzone');
+    dropzones.forEach(dz => {
+        const observer = new MutationObserver(() => {
+            atualizarMenuPersonagens();
+        });
+        observer.observe(dz, { childList: true, subtree: true });
+    });
+}
+
+// Botão fechar menu unificado
+document.addEventListener('DOMContentLoaded', () => {
+    const fecharBtn = document.getElementById('fechar-menu');
+    const toggleBtn = document.getElementById('toggle-menu-btn');
+    const menuUnificado = document.getElementById('menu-unificado');
+    
+    if (fecharBtn) {
+        fecharBtn.addEventListener('click', () => {
+            menuUnificado.classList.remove('active');
+            if (toggleBtn) toggleBtn.classList.remove('hidden');
+        });
+    }
+    
+    // Botão flutuante para abrir menu
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            menuUnificado.classList.add('active');
+            toggleBtn.classList.add('hidden');
+        });
+    }
+});
+
+// Chamar quando a página carregar
+setTimeout(() => {
+    setupPersonagensObserver();
+    atualizarMenuPersonagens();
+}, 500);
+
 function loadRightMenuContent(menuId) {
     const menu = document.getElementById(menuId);
     if (!menu) return;
@@ -529,4 +601,178 @@ if (recordButton) {
         }
     });
 }
+
+// ===== MENU ACESSÓRIOS/EXPRESSÕES/AÇÕES =====
+
+let personagemSelecionado = null; // Número do personagem (1-6)
+let elementoPersonagemSelecionado = null; // Referência ao elemento IMG do personagem
+let expressaoSelecionada = 1; // Expressão atual para as ações (1-3)
+
+function abrirMenuAcessoriosPersonagem(numPersonagem, elemento) {
+    personagemSelecionado = numPersonagem;
+    elementoPersonagemSelecionado = elemento; // Guardar referência ao elemento
+    const container = document.getElementById('menu-unificado');
+    const toggleBtn = document.getElementById('toggle-menu-btn');
+    const nomeElement = document.getElementById('personagem-nome-selecionado');
+    
+    nomeElement.textContent = `PERSONAGEM ${numPersonagem}`;
+    container.classList.add('active');
+    if (toggleBtn) toggleBtn.classList.add('hidden');
+    
+    // Atualizar miniaturas
+    atualizarMiniaturasSelecionadas(numPersonagem);
+    
+    // Carregar os conteúdos
+    carregarExpressoes(numPersonagem);
+    carregarAcoes(numPersonagem);
+}
+
+function atualizarMiniaturasSelecionadas(numPersonagem) {
+    const container = document.getElementById('personagens-miniaturas');
+    container.innerHTML = '';
+    
+    // Mostrar apenas as personagens que foram adicionadas ao palco
+    for (const [numPerson, data] of personagensAdicionados) {
+        const miniDiv = document.createElement('div');
+        miniDiv.className = 'miniatura-personagem';
+        if (data.numPersonagem === numPersonagem) miniDiv.classList.add('selecionado');
+        
+        const img = document.createElement('img');
+        img.src = `images/personagens/p${data.numPersonagem}.png`;
+        miniDiv.appendChild(img);
+        
+        miniDiv.addEventListener('click', () => {
+            // Mudar para outro personagem usando o elemento armazenado
+            abrirMenuAcessoriosPersonagem(data.numPersonagem, data.elemento);
+        });
+        
+        container.appendChild(miniDiv);
+    }
+}
+
+function carregarExpressoes(numPersonagem) {
+    const grid = document.getElementById('grid-expressoes');
+    grid.innerHTML = '';
+    
+    // As expressões são: p1_e1, p1_e2, p1_e3
+    const expressoes = [];
+    for (let e = 1; e <= 3; e++) {
+        const filename = `p${numPersonagem}_e${e}.png`;
+        const src = `images/expressoes/${filename}`;
+        expressoes.push({
+            src,
+            label: `Expressão ${e}`,
+            filename,
+            numExpressao: e
+        });
+    }
+    
+    expressoes.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item-biblioteca';
+        
+        const img = document.createElement('img');
+        img.className = 'item-thumbnail';
+        img.src = item.src;
+        img.alt = item.label;
+        
+        img.onerror = function() {
+            this.style.opacity = '0.3';
+        };
+        
+        const label = document.createElement('span');
+        label.className = 'item-label';
+        label.textContent = item.label;
+        
+        itemDiv.appendChild(img);
+        itemDiv.appendChild(label);
+        
+        // Click para atualizar o personagem
+        itemDiv.addEventListener('click', () => {
+            if (elementoPersonagemSelecionado) {
+                elementoPersonagemSelecionado.src = item.src;
+                
+                // Remover seleção anterior
+                document.querySelectorAll('#grid-expressoes .item-biblioteca.selecionado').forEach(el => {
+                    el.classList.remove('selecionado');
+                });
+                
+                // Adicionar seleção ao clicado
+                itemDiv.classList.add('selecionado');
+                
+                // Atualizar expressão selecionada e recarregar ações
+                expressaoSelecionada = item.numExpressao;
+                carregarAcoes(personagemSelecionado);
+                
+                console.log(`Personagem ${personagemSelecionado} atualizado com expressão: ${item.label}`);
+            }
+        });
+        
+        grid.appendChild(itemDiv);
+    });
+}
+
+function carregarAcoes(numPersonagem) {
+    const grid = document.getElementById('grid-acoes');
+    grid.innerHTML = '';
+    
+    // As ações mostram apenas os 3 frames da expressão selecionada
+    // Estrutura: p1_e{expressao}_f1, p1_e{expressao}_f2, p1_e{expressao}_f3
+    
+    const acoes = [];
+    for (let f = 1; f <= 3; f++) {
+        const filename = `p${numPersonagem}_e${expressaoSelecionada}_f${f}.gif`;
+        const src = `images/acoes/${filename}`;
+        acoes.push({
+            src,
+            label: `Ação ${f}`,
+            filename
+        });
+    }
+    
+    acoes.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item-biblioteca';
+        
+        const img = document.createElement('img');
+        img.className = 'item-thumbnail';
+        img.src = item.src;
+        img.alt = item.label;
+        
+        img.onerror = function() {
+            this.style.opacity = '0.3';
+        };
+        
+        const label = document.createElement('span');
+        label.className = 'item-label';
+        label.textContent = item.label;
+        
+        itemDiv.appendChild(img);
+        itemDiv.appendChild(label);
+        
+        // Click para atualizar o personagem
+        itemDiv.addEventListener('click', () => {
+            if (elementoPersonagemSelecionado) {
+                elementoPersonagemSelecionado.src = item.src;
+                
+                // Remover seleção anterior
+                document.querySelectorAll('#grid-acoes .item-biblioteca.selecionado').forEach(el => {
+                    el.classList.remove('selecionado');
+                });
+                
+                // Adicionar seleção ao clicado
+                itemDiv.classList.add('selecionado');
+                
+                console.log(`Personagem ${personagemSelecionado} atualizado com ação: ${item.label}`);
+            }
+        });
+        
+        grid.appendChild(itemDiv);
+    });
+}
+
+// Setup das abas
+document.addEventListener('DOMContentLoaded', () => {
+    // Removido: abas não são mais necessárias no novo layout
+});
 

@@ -67,14 +67,42 @@
             <button id="acao2" class="acao acao_bt" data-target="acao2">
                 <img class="icon icon_acoes" src="icones/acenar.svg" alt="gravar">
             </button>
-            <button id="acao3" class="acao acao_bt" data-target="acao2">
+            <button id="acao3" class="acao acao_bt" data-target="acao3">
                 <img class="icon icon_acoes" src="icones/falar.svg" alt="gravar">
             </button>
+             <button id="refletir" class="acao acao_bt" data-target="refletir">
+                <img class="icon icon_acoes" src="icones/refletir.svg" alt="refletir">
+            </button>
+            <button id="agrupar" class="acao acao_bt" data-target="agrupar">
+                <img class="icon icon_acoes" src="icones/agrupar.svg" alt="agrupar">
+            </button>
         </div>
-        <button id="refletir" class="acao acao_bt" data-target="refletir">
-            <img class="icon icon_acoes" src="icones/refletir.svg" alt="refletir">
-        </button>
     </div>
+
+    <div class="menu-unificado" id="menu-unificado">
+        <div class="menu-header">
+            <div class="personagens-miniaturas" id="personagens-miniaturas"></div>
+            <h3 id="personagem-nome-selecionado">Selecione um Personagem</h3>
+            <button id="fechar-menu" class="fechar-btn">✕</button>
+        </div>
+        
+        <div class="menu-conteudo">
+            <div class="bibliotecas-secao">
+                <h4 class="secao-titulo">EXPRESSÕES</h4>
+                <div class="items-grid" id="grid-expressoes"></div>
+            </div>
+            
+            <div class="bibliotecas-secao">
+                <h4 class="secao-titulo">AÇÕES</h4>
+                <div class="items-grid" id="grid-acoes"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ícone flutuante para abrir menu quando está fechado -->
+    <button id="toggle-menu-btn" class="toggle-menu-btn" title="Abrir menu de personagens">
+        <img src="icones/personagens.svg" alt="Menu">
+    </button>
 
     <div class="principal_menu_direita">
         <div class="menu-container_direita" id="menu-container_direita">
