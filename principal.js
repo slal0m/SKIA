@@ -502,7 +502,7 @@ function setupPersonagemActions() {
 
     palco.addEventListener("click", function (event) {
         
-        const clickedItem = event.target.closest('.draggable-item.personagens');
+        const clickedItem = event.target.closest('.draggable-item.personagens, .draggable-item.objetos');
         const isActionClick = event.target.closest('#menu_acoes button'); 
 
         if (clickedItem) {
