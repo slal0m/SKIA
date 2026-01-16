@@ -570,30 +570,28 @@ luzsom();
 
 //RECORDING SCREEN
 
+
+
 let mediaRecorder;
 let recordedChunks = [];
 let stream;
 
 const recordButton = document.getElementById('gravar');
-const recordIcon = recordButton ? recordButton.querySelector('.icon') : null;
-
 
 function startRecording() {
-    // 1. Capturar o conteúdo da tela
     navigator.mediaDevices.getDisplayMedia({
-        video: {
-            cursor: "always", // Opcional: para mostrar o cursor
-        },
-        audio: true // Opcional: para gravar áudio do sistema/microfone
+        video: { cursor: "always" },
+        audio: true
     })
     .then(displayStream => {
         stream = displayStream;
         recordedChunks = [];
 
-        // 2. Configurar o MediaRecorder
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8' });
+        mediaRecorder = new MediaRecorder(stream, {
+            mimeType: 'video/webm; codecs=vp8'
+        });
 
-        mediaRecorder.ondataavailable = function(event) {
+        mediaRecorder.ondataavailable = function (event) {
             if (event.data.size > 0) {
                 recordedChunks.push(event.data);
             }
@@ -601,37 +599,32 @@ function startRecording() {
 
         mediaRecorder.onstop = downloadRecording;
 
-        // 3. Iniciar a gravação
         mediaRecorder.start();
-        
-        // Atualizar o UI
-        if (recordIcon) {
-            recordIcon.textContent = 'stop'; // Mudar o ícone para "Parar"
-            recordButton.classList.add('recording');
-        }
+
+        // ✅ botão fica branco
+        recordButton.classList.add('recording');
 
         console.log("Gravação iniciada...");
     })
     .catch(err => {
-        console.error("Erro ao iniciar a captura de tela: ", err);
-        alert("Não foi possível iniciar a gravação. Certifique-se de que deu permissão para a captura de tela.");
+        console.error("Erro ao iniciar a captura de tela:", err);
+        alert("Não foi possível iniciar a gravação.");
     });
 }
 
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
         mediaRecorder.stop();
-        // Parar as tracks (o prompt do navegador para de mostrar a tela compartilhada)
         stream.getTracks().forEach(track => track.stop());
 
-        // Atualizar o UI
-        if (recordIcon) {
-            recordIcon.textContent = 'videocam'; // Mudar o ícone de volta para "Gravar"
-            recordButton.classList.remove('recording');
-        }
+        // ✅ botão volta ao vermelho
+        recordButton.classList.remove('recording');
+
         console.log("Gravação parada.");
     }
 }
+
+
 
 function downloadRecording() {
     if (recordedChunks.length === 0) {
