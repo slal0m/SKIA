@@ -191,6 +191,32 @@ function flipActiveItem() {
 
 const TRANSITION_DURATION = 500;
 
+// Utilitários para gerir o destaque persistente
+function setActiveTrack(audioPath) {
+    // Guardar a faixa ativa
+    localStorage.setItem('activeAudioPath', audioPath);
+
+    // Remover highlight anterior
+    document.querySelectorAll('.musicas').forEach(el => el.classList.remove('active-track'));
+
+    // Aplicar highlight ao elemento com o data-audio correspondente (se existir no DOM atual)
+    const current = document.querySelector(`.musicas[data-audio="${CSS.escape(audioPath)}"]`);
+    if (current) current.classList.add('active-track');
+}
+
+function applyActiveTrackFromStorage() {
+    const savedPath = localStorage.getItem('activeAudioPath');
+    if (!savedPath) return;
+
+    // Remove de todos
+    document.querySelectorAll('.musicas').forEach(el => el.classList.remove('active-track'));
+
+    // Re-aplica no que está presente agora
+    const el = document.querySelector(`.musicas[data-audio="${CSS.escape(savedPath)}"]`);
+    if (el) el.classList.add('active-track');
+}
+
+
 function loadImages(menuId, images) {
     const menu = document.getElementById(menuId);
     // Seleciona o contêiner principal: <div class="palco">
@@ -274,42 +300,65 @@ function loadImages(menuId, images) {
             else if(menuId === 'cenarios_menu') {
                 img.classList.add('cenarios');
             }
-            else if(menuId === 'musica_menu') {
-                img.classList.add('musicas');
-                img.addEventListener('click', () => {
-                    
-                    const musicNumber = index + 1;
-                    const audioPath = `audios/m${musicNumber}.wav`;
-                    
-                    const isSameTrackPlaying = (backgroundMusic.src.endsWith(audioPath) && !backgroundMusic.paused);
-                    
-                    document.querySelectorAll('.musicas').forEach(el => el.classList.remove('active-track'));
+            
+else if (menuId === 'musica_menu') {
+    // img já existe do teu código
+    img.classList.add('musicas');
 
-                    if (isSameTrackPlaying) {
-                        // 1. SE A MESMA MÚSICA ESTIVER A TOCAR, PARAR.
-                        backgroundMusic.pause();
-                        console.log(`Música ${musicNumber} parada.`);
-                        
-                    } else if (backgroundMusic.src.endsWith(audioPath)) {
-                        // 2. SE A MESMA MÚSICA ESTIVER PAUSADA, CONTINUAR.
-                        backgroundMusic.play().then(() => {
-                            img.classList.add('active-track');
-                            console.log(`Música ${musicNumber} retomada.`);
-                        }).catch(error => console.error("Erro ao retomar:", error));
+    // ⚠️ Define o caminho aqui, fora do click, com base no index
+    const musicNumber = index + 1;
+    const audioPath = `audios/m${musicNumber}.wav`;
 
-                    } else {
-                        // 3. SE FOR UMA NOVA MÚSICA, MUDAR O SOURCE E TOCAR.
-                        backgroundMusic.src = audioPath;
-                        backgroundMusic.play().then(() => {
-                            img.classList.add('active-track');
-                            console.log(`A tocar: ${audioPath}`);
-                        }).catch(error => {
-                            console.error(`Erro ao tentar tocar a música ${audioPath}:`, error);
-                            alert(`Não foi possível tocar o ficheiro de áudio ${audioPath}. Verifique o caminho.`);
-                        });
-                    }
-                });
-            }
+    // Guarda no DOM para conseguirmos re-sincronizar quando abrimos o menu
+    img.dataset.audio = audioPath;
+
+    // Se quiseres, no momento de criar cada item, verifica se é o ativo e aplica já:
+    const savedPath = localStorage.getItem('activeAudioPath');
+    if (savedPath && savedPath === audioPath) {
+        img.classList.add('active-track');
+    }
+
+    img.addEventListener('click', () => {
+
+        const isSameTrackPlaying = (
+            backgroundMusic.src.endsWith(audioPath) && !backgroundMusic.paused
+        );
+
+        // Remove o highlight de todos ANTES de decidir o novo estado
+        document.querySelectorAll('.musicas').forEach(el => el.classList.remove('active-track'));
+
+        if (isSameTrackPlaying) {
+            // 1) Mesma música a tocar → parar
+            backgroundMusic.pause();
+            console.log(`Música ${musicNumber} parada.`);
+
+            // 👉 Mantemos como ativa, conforme pediste ("esteja sempre highlighted")
+            setActiveTrack(audioPath);
+
+        } else if (backgroundMusic.src.endsWith(audioPath)) {
+            // 2) Mesma música estava pausada → retomar
+            backgroundMusic.play().then(() => {
+                setActiveTrack(audioPath);
+                console.log(`Música ${musicNumber} retomada.`);
+            }).catch(error => console.error("Erro ao retomar:", error));
+
+        } else {
+            // 3) Nova música → mudar o source e tocar
+            backgroundMusic.src = audioPath;
+            backgroundMusic.play().then(() => {
+                setActiveTrack(audioPath);
+                console.log(`A tocar: ${audioPath}`);
+            }).catch(error => {
+                console.error(`Erro ao tentar tocar a música ${audioPath}:`, error);
+                alert(`Não foi possível tocar o ficheiro de áudio ${audioPath}. Verifique o caminho.`);
+            });
+        }
+    });
+
+    // 💡 (Opcional mas recomendado) Quando o menu "música" é aberto/re-renderizado, chama:
+    // applyActiveTrackFromStorage();
+}
+
 
             img.onerror = function() {
                 this.style.display = 'none'; // esconde imagens que não existem
