@@ -567,7 +567,7 @@ body {
 }
 
 #personagens_menu{
-  background-color: #e5d67c;
+    background-color: #dec0d5;
   overflow-y: auto;     /* enables vertical scroll */
   overflow-x: hidden;   
 }
@@ -587,7 +587,7 @@ body {
 }
 
 #objetos_menu{
-  background-color: #dec0d5;
+ background-color: #e5d67c;
   overflow-y: auto;     /* enables vertical scroll */
   overflow-x: hidden;   
 }
